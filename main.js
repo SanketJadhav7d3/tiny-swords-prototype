@@ -1,8 +1,8 @@
 
 var config = {
   type: Phaser.AUTO,
-  width: 1800,
-  height: 1000,
+  width: window.innerWidth,
+  height: window.innerHeight,
   physics: {
     default: 'arcade',
     arcade: {
@@ -104,17 +104,24 @@ function create () {
 
   // Set up the arrows to control the camera
   const cursors = this.input.keyboard.createCursorKeys();
-  controls = new Phaser.Cameras.Controls.FixedKeyControl({
-    camera: camera,
-    left: cursors.left,
-    right: cursors.right,
-    up: cursors.up,
-    down: cursors.down,
-    speed: 0.5
-  });
+  
+  // controls = new Phaser.Cameras.Controls.FixedKeyControl({
+    // camera: camera,
+    // left: cursors.left,
+    // right: cursors.right,
+    // up: cursors.up,
+    // down: cursors.down,
+    // speed: 0.5
+  // });
 
   // Constrain the camera so that it isn't allowed to move outside the width/height of tilemap
+  this.cameraDummy = this.add.rectangle(map.widthInPixels / 2, map.heightInPixels / 2, 10, 10, 0xff0000).setOrigin(0, 0);
+
   camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+
+  this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+
+  camera.startFollow(this.cameraDummy, true, 0.08, 0.08);
 
   // Help text that has a "fixed" position on the screen
   this.add
@@ -124,8 +131,26 @@ function create () {
       padding: { x: 20, y: 10 },
       backgroundColor: "#000000"
     }).setScrollFactor(0);
+
+  this.prevPointer = this.input.activePointer.position.clone();
 }
 
 function update (time, delta) {
-  controls.update(delta);
+  // Get the pointer position
+  const pointer = this.input.activePointer;
+
+  // Calculate the movement speed based on pointer position
+  const speed = 5;
+
+
+  // Move the cameraDummy based on pointer position relative to screen edges
+  if (pointer.isDown) {
+
+    console.log("camera", this.cameraDummy.x, this.cameraDummy.y);
+    console.log("mouse", pointer.x, pointer.y);
+
+    this.cameraDummy.x = pointer.x;
+    this.cameraDummy.y = pointer.y;
+
+  }
 }
