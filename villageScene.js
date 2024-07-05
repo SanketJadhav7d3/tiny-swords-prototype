@@ -10,24 +10,24 @@ export default class VillageScene extends Phaser.Scene {
 
   preload() {
     // this means current scence
-    this.load.image("water-tiles", "..\/Tiny Swords\/Tiny Swords (Update 010)\/Terrain\/Water\/Water.png");
-    this.load.image("land-tiles", "..\/Tiny Swords\/Tiny Swords (Update 010)\/Terrain\/Ground\/Tilemap_Flat.png");
-    this.load.image("elevation-tiles", "..\/Tiny Swords\/Tiny Swords (Update 010)\/Terrain\/Ground\/Tilemap_Elevation.png");
-    this.load.image("bridge-tiles", "..\/Tiny Swords\/Tiny Swords (Update 010)\/Terrain\/Bridge\/Bridge_All.png");
-    this.load.image("castle-tiles", "..\/Tiny Swords\/Tiny Swords (Update 010)\/Factions\/Knights\/Buildings\/Castle\/Castle_Blue.png");
+    this.load.image("water-tiles", "./Tiny Swords\/Tiny Swords (Update 010)\/Terrain\/Water\/Water.png");
+    this.load.image("land-tiles", "./Tiny Swords\/Tiny Swords (Update 010)\/Terrain\/Ground\/Tilemap_Flat.png");
+    this.load.image("elevation-tiles", "./Tiny Swords\/Tiny Swords (Update 010)\/Terrain\/Ground\/Tilemap_Elevation.png");
+    this.load.image("bridge-tiles", "./Tiny Swords\/Tiny Swords (Update 010)\/Terrain\/Bridge\/Bridge_All.png");
+    this.load.image("castle-tiles", "./Tiny Swords\/Tiny Swords (Update 010)\/Factions\/Knights\/Buildings\/Castle\/Castle_Blue.png");
 
     // deco
-    this.load.image("deco-01-tiles", "..\/Tiny Swords\/Tiny Swords (Update 010)\/Deco\/01.png");
-    this.load.image("deco-16-tiles", "..\/Tiny Swords\/Tiny Swords (Update 010)\/Deco\/16.png");
-    this.load.image("deco-18-tiles", "..\/Tiny Swords\/Tiny Swords (Update 010)\/Deco\/18.png");
-    this.load.image("deco-02-tiles", "..\/Tiny Swords\/Tiny Swords (Update 010)\/Deco\/02.png");
-    this.load.image("deco-08-tiles", "..\/Tiny Swords\/Tiny Swords (Update 010)\/Deco\/08.png");
-    this.load.image("deco-09-tiles", "..\/Tiny Swords\/Tiny Swords (Update 010)\/Deco\/09.png");
-    this.load.image("deco-03-tiles", "..\/Tiny Swords\/Tiny Swords (Update 010)\/Deco\/03.png");
+    this.load.image("deco-01-tiles", "./Tiny Swords\/Tiny Swords (Update 010)\/Deco\/01.png");
+    this.load.image("deco-16-tiles", "./Tiny Swords\/Tiny Swords (Update 010)\/Deco\/16.png");
+    this.load.image("deco-18-tiles", "./Tiny Swords\/Tiny Swords (Update 010)\/Deco\/18.png");
+    this.load.image("deco-02-tiles", "./Tiny Swords\/Tiny Swords (Update 010)\/Deco\/02.png");
+    this.load.image("deco-08-tiles", "./Tiny Swords\/Tiny Swords (Update 010)\/Deco\/08.png");
+    this.load.image("deco-09-tiles", "./Tiny Swords\/Tiny Swords (Update 010)\/Deco\/09.png");
+    this.load.image("deco-03-tiles", "./Tiny Swords\/Tiny Swords (Update 010)\/Deco\/03.png");
 
-    this.load.spritesheet("tree", "..\/Tiny Swords\/Tiny Swords (Update 010)\/Resources\/Trees\/Tree.png", { frameWidth: 64 * 3, frameHeight: 64 * 3});
+    this.load.spritesheet("tree", "./Tiny Swords\/Tiny Swords (Update 010)\/Resources\/Trees\/Tree.png", { frameWidth: 64 * 3, frameHeight: 64 * 3});
 
-    this.load.tilemapTiledJSON("map", "..\/FINAL-MAP-uncompressed.tmj");
+    this.load.tilemapTiledJSON("map", "./FINAL-MAP-uncompressed.tmj");
   }
 
   create() {

@@ -1,5 +1,5 @@
 
-import VillageScene from './scenes/villageScene.js';
+import VillageScene from './villageScene.js';
 
 
 var config = {
