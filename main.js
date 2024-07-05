@@ -22,6 +22,7 @@ var platforms;
 
 var game = new Phaser.Game(config);
 let controls;
+let cameraSpeed = 5;
 
 let trees;
 
@@ -74,7 +75,7 @@ function create () {
   const grassLayer2 = map.createLayer("grass 2", landTileset, 0, 0);
   const bridgeLayer = map.createLayer("bridge", bridgeTileset, 0, 0);
 
-  const deco01Layer = map.createLayer("deco", [deco03Tileset, deco01Tileset, deco16Tileset, deco18Tileset, deco02Tileset, deco08Tileset, deco09Tileset], 0, 0);
+  const decoLayer = map.createLayer("deco", [deco03Tileset, deco01Tileset, deco16Tileset, deco18Tileset, deco02Tileset, deco08Tileset, deco09Tileset], 0, 0);
 
   // add sprite at position castle
   const castlePoint = map.findObject("castle", obj => obj.name == "castle-point");
@@ -102,26 +103,21 @@ function create () {
 
   const camera = this.cameras.main;
 
+  camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+
   // Set up the arrows to control the camera
   const cursors = this.input.keyboard.createCursorKeys();
   
-  // controls = new Phaser.Cameras.Controls.FixedKeyControl({
-    // camera: camera,
-    // left: cursors.left,
-    // right: cursors.right,
-    // up: cursors.up,
-    // down: cursors.down,
-    // speed: 0.5
-  // });
+  controls = new Phaser.Cameras.Controls.FixedKeyControl({
+    camera: camera,
+    left: cursors.left,
+    right: cursors.right,
+    up: cursors.up,
+    down: cursors.down,
+    speed: 0.5
+  });
 
-  // Constrain the camera so that it isn't allowed to move outside the width/height of tilemap
-  this.cameraDummy = this.add.rectangle(map.widthInPixels / 2, map.heightInPixels / 2, 10, 10, 0xff0000).setOrigin(0, 0);
-
-  camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-
-  this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-
-  camera.startFollow(this.cameraDummy, true, 0.08, 0.08);
+  this.input.on('pointermove', handlePointerMove, this);
 
   // Help text that has a "fixed" position on the screen
   this.add
@@ -136,21 +132,24 @@ function create () {
 }
 
 function update (time, delta) {
-  // Get the pointer position
-  const pointer = this.input.activePointer;
+  controls.update(delta);
+}
 
-  // Calculate the movement speed based on pointer position
-  const speed = 5;
+function handlePointerMove(pointer) {
+  // Edge scrolling with pointer position
+  const scrollMargin = 200; // Adjust as needed
+  const { x, y } = pointer;
 
-
-  // Move the cameraDummy based on pointer position relative to screen edges
-  if (pointer.isDown) {
-
-    console.log("camera", this.cameraDummy.x, this.cameraDummy.y);
-    console.log("mouse", pointer.x, pointer.y);
-
-    this.cameraDummy.x = pointer.x;
-    this.cameraDummy.y = pointer.y;
-
+  if (x < scrollMargin) {
+    // this.cameras.main.pan(this.cameras.main.scrollX+cameraSpeed, this.cameras.main.scrollY);
+    this.cameras.main.scrollX -= cameraSpeed;
+  } else if (x > this.cameras.main.width - scrollMargin) {
+    this.cameras.main.scrollX += cameraSpeed;
+    // this.cameras.main.pan(this.cameras.main.scrollX-cameraSpeed, this.cameras.main.scrollY);
+  }
+  if (y < scrollMargin) {
+    this.cameras.main.scrollY -= cameraSpeed;
+  } else if (y > this.cameras.main.height - scrollMargin) {
+    this.cameras.main.scrollY += cameraSpeed;
   }
 }
