@@ -26,6 +26,9 @@ export default class VillageScene extends Phaser.Scene {
     this.load.image("deco-03-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Deco/03.png");
 
     this.load.spritesheet("tree", "./Tiny Swords/Tiny Swords (Update 010)/Resources/Trees/Tree.png", { frameWidth: 64 * 3, frameHeight: 64 * 3});
+    this.load.spritesheet("water-rock-02", "./Tiny Swords/Tiny Swords (Update 010)/Terrain/Water/Rocks/Rocks_02.png", { frameWidth: 64 * 2, frameHeight: 64 * 2});
+
+    this.load.spritesheet("water-rock-03", "./Tiny Swords/Tiny Swords (Update 010)/Terrain/Water/Rocks/Rocks_03.png", { frameWidth: 64 * 2, frameHeight: 64 * 2});
 
     this.load.tilemapTiledJSON("map", "./FINAL-MAP-uncompressed.tmj");
   }
@@ -67,13 +70,6 @@ export default class VillageScene extends Phaser.Scene {
     this.trees = this.physics.add.group();
     const treesPoints = map.getObjectLayer("trees")['objects'];
 
-    this.anims.create({
-      key: 'wind',
-      frames: this.anims.generateFrameNumbers('tree', { start: 0, end: 3 }), // Assuming 6 frames in the spritesheet
-      frameRate: 7,
-      repeat: -1
-    });
-
     treesPoints.forEach(object => {
       let obj = this.trees.create(object.x, object.y, "tree");
       let delay = Phaser.Math.Between(0, 2000); // Random delay between 0 and 2000 milliseconds
@@ -81,6 +77,52 @@ export default class VillageScene extends Phaser.Scene {
       this.time.delayedCall(delay, () => {
         obj.play('wind');
       }, [], this);
+    });
+    
+    // water rocks
+    this.rocks02 = this.physics.add.group();
+    const waterRockPoints02 = map.getObjectLayer("water-rocks-02")['objects'];
+
+    waterRockPoints02.forEach(object => {
+      let obj = this.rocks02.create(object.x, object.y, "water-rock");
+      let delay = Phaser.Math.Between(0, 2000); // Random delay between 0 and 2000 milliseconds
+      obj.setOrigin(0.5, 1);
+      this.time.delayedCall(delay, () => {
+        obj.play('rock-anim-02');
+      }, [], this);
+    });
+
+    this.rocks03 = this.physics.add.group();
+    const waterRockPoints03 = map.getObjectLayer("water-rocks-03")['objects'];
+
+    waterRockPoints03.forEach(object => {
+      let obj = this.rocks03.create(object.x, object.y, "water-rock-03");
+      let delay = Phaser.Math.Between(0, 2000); // Random delay between 0 and 2000 milliseconds
+      obj.setOrigin(0.5, 1);
+      this.time.delayedCall(delay, () => {
+        obj.play('rock-anim-03');
+      }, [], this);
+    });
+
+    this.anims.create({
+      key: 'wind',
+      frames: this.anims.generateFrameNumbers('tree', { start: 0, end: 3 }), // Assuming 6 frames in the spritesheet
+      frameRate: 7,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'rock-anim-02',
+      frames: this.anims.generateFrameNumbers('water-rock-02', { start: 0, end: 7 }), // Assuming 6 frames in the spritesheet
+      frameRate: 7,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'rock-anim-03',
+      frames: this.anims.generateFrameNumbers('water-rock-03', { start: 0, end: 7 }), // Assuming 6 frames in the spritesheet
+      frameRate: 7,
+      repeat: -1
     });
 
     const camera = this.cameras.main;
