@@ -3,6 +3,23 @@
 let cameraSpeed = 10;
 let trees;
 
+
+//     ▄   ▄█ █    █    ██     ▄▀  ▄███▄    
+//      █  ██ █    █    █ █  ▄▀    █▀   ▀   
+// █     █ ██ █    █    █▄▄█ █ ▀▄  ██▄▄     
+//  █    █ ▐█ ███▄ ███▄ █  █ █   █ █▄   ▄▀  
+//   █  █   ▐     ▀    ▀   █  ███  ▀███▀    
+//    █▐                  █                 
+//    ▐                  ▀                  
+//    ▄▄▄▄▄   ▄█▄    ▄███▄      ▄   ▄███▄   
+//   █     ▀▄ █▀ ▀▄  █▀   ▀      █  █▀   ▀  
+// ▄  ▀▀▀▀▄   █   ▀  ██▄▄    ██   █ ██▄▄    
+//  ▀▄▄▄▄▀    █▄  ▄▀ █▄   ▄▀ █ █  █ █▄   ▄▀ 
+//            ▀███▀  ▀███▀   █  █ █ ▀███▀   
+//                           █   ██         
+
+
+
 export default class VillageScene extends Phaser.Scene {
   constructor() {
     super({ key: 'MainMenuScene' });
@@ -84,7 +101,7 @@ export default class VillageScene extends Phaser.Scene {
     const waterRockPoints02 = map.getObjectLayer("water-rocks-02")['objects'];
 
     waterRockPoints02.forEach(object => {
-      let obj = this.rocks02.create(object.x, object.y, "water-rock");
+      let obj = this.rocks02.create(object.x, object.y, "water-rock-02");
       let delay = Phaser.Math.Between(0, 2000); // Random delay between 0 and 2000 milliseconds
       obj.setOrigin(0.5, 1);
       this.time.delayedCall(delay, () => {
