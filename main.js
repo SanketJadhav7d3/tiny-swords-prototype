@@ -22,7 +22,7 @@ var platforms;
 
 var game = new Phaser.Game(config);
 let controls;
-let cameraSpeed = 5;
+let cameraSpeed = 10;
 
 let trees;
 
@@ -117,7 +117,7 @@ function create () {
     speed: 0.5
   });
 
-  this.input.on('pointermove', handlePointerMove, this);
+  // this.input.on('pointermove', handlePointerMove, this);
 
   // Help text that has a "fixed" position on the screen
   this.add
@@ -133,12 +133,11 @@ function create () {
 
 function update (time, delta) {
   controls.update(delta);
-}
 
-function handlePointerMove(pointer) {
   // Edge scrolling with pointer position
   const scrollMargin = 200; // Adjust as needed
-  const { x, y } = pointer;
+  const x = this.input.mousePointer.x;
+  const y = this.input.mousePointer.y;
 
   if (x < scrollMargin) {
     // this.cameras.main.pan(this.cameras.main.scrollX+cameraSpeed, this.cameras.main.scrollY);
@@ -152,4 +151,7 @@ function handlePointerMove(pointer) {
   } else if (y > this.cameras.main.height - scrollMargin) {
     this.cameras.main.scrollY += cameraSpeed;
   }
+}
+
+function handlePointerMove(pointer) {
 }
