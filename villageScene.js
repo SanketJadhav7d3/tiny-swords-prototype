@@ -1,8 +1,4 @@
 
-// let controls;
-let cameraSpeed = 10;
-let trees;
-
 
 //     ▄   ▄█ █    █    ██     ▄▀  ▄███▄    
 //      █  ██ █    █    █ █  ▄▀    █▀   ▀   
@@ -18,11 +14,15 @@ let trees;
 //            ▀███▀  ▀███▀   █  █ █ ▀███▀   
 //                           █   ██         
 
+import Player from './entities/playerEntity.js';
 
+// let controls;
+let cameraSpeed = 10;
+let trees;
 
 export default class VillageScene extends Phaser.Scene {
   constructor() {
-    super({ key: 'MainMenuScene' });
+    super({ key: 'VillageScene' });
   }
 
   preload() {
@@ -48,10 +48,23 @@ export default class VillageScene extends Phaser.Scene {
     this.load.spritesheet("water-rock-03", "./Tiny Swords/Tiny Swords (Update 010)/Terrain/Water/Rocks/Rocks_03.png", { frameWidth: 64 * 2, frameHeight: 64 * 2});
 
     this.load.tilemapTiledJSON("map", "./FINAL-MAP-uncompressed.tmj");
+
+
+    this.load.spritesheet("knight-entity", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png", 
+      { frameWidth: 64*3, frameHeight: 64*3});
+
   }
 
   create() {
     const map = this.make.tilemap({ key: "map"});
+
+    // █    ██  ▀▄    ▄ ▄███▄   █▄▄▄▄   ▄▄▄▄▄   
+    // █    █ █   █  █  █▀   ▀  █  ▄▀  █     ▀▄ 
+    // █    █▄▄█   ▀█   ██▄▄    █▀▀▌ ▄  ▀▀▀▀▄   
+    // ███▄ █  █   █    █▄   ▄▀ █  █  ▀▄▄▄▄▀    
+    //     ▀   █ ▄▀     ▀███▀     █             
+    //        █                  ▀              
+    //       ▀                                  
 
     // parameters -- phaser tileset name (used in Tiled), image key in phaser cache
     const waterTileset = map.addTilesetImage("water", "water-tiles");
@@ -79,6 +92,60 @@ export default class VillageScene extends Phaser.Scene {
 
     const decoLayer = map.createLayer("deco", [deco03Tileset, deco01Tileset, deco16Tileset, deco18Tileset, deco02Tileset, deco08Tileset, deco09Tileset], 0, 0);
 
+
+    // ██      ▄   ▄█ █▀▄▀█ ██     ▄▄▄▄▀ ▄█ ████▄    ▄      ▄▄▄▄▄   
+    // █ █      █  ██ █ █ █ █ █ ▀▀▀ █    ██ █   █     █    █     ▀▄ 
+    // █▄▄█ ██   █ ██ █ ▄ █ █▄▄█    █    ██ █   █ ██   █ ▄  ▀▀▀▀▄   
+    // █  █ █ █  █ ▐█ █   █ █  █   █     ▐█ ▀████ █ █  █  ▀▄▄▄▄▀    
+    //    █ █  █ █  ▐    █     █  ▀       ▐       █  █ █            
+    //   █  █   ██      ▀     █                   █   ██            
+    //  ▀                    ▀                                      
+
+    this.anims.create({
+      key: 'wind',
+      frames: this.anims.generateFrameNumbers('tree', { start: 0, end: 3 }), // Assuming 6 frames in the spritesheet
+      frameRate: 7,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'knight-entity-anim',
+      frames: this.anims.generateFrameNumbers('knight-entity', { start: 0, end: 5 }), // Assuming 6 frames in the spritesheet
+      frameRate: 10,
+      repeat: -1
+    });
+
+    const player = this.physics.add.sprite(500, 500, 'knight-entity');
+    player.play('knight-entity-anim');
+
+    this.anims.create({
+      key: 'rock-anim-02',
+      frames: this.anims.generateFrameNumbers('water-rock-02', { start: 0, end: 7 }), // Assuming 6 frames in the spritesheet
+      frameRate: 7,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'rock-anim-03',
+      frames: this.anims.generateFrameNumbers('water-rock-03', { start: 0, end: 7 }), // Assuming 6 frames in the spritesheet
+      frameRate: 7,
+      repeat: -1
+    });
+
+    // ▄███▄      ▄     ▄▄▄▄▀ ▄█    ▄▄▄▄▀ ▀▄    ▄           
+    // █▀   ▀      █ ▀▀▀ █    ██ ▀▀▀ █      █  █            
+    // ██▄▄    ██   █    █    ██     █       ▀█             
+    // █▄   ▄▀ █ █  █   █     ▐█    █        █              
+    // ▀███▀   █  █ █  ▀       ▐   ▀       ▄▀               
+    //         █   ██                                       
+    //                                                      
+    //    ▄▄▄▄▄   █ ▄▄  █▄▄▄▄ ▄█    ▄▄▄▄▀ ▄███▄     ▄▄▄▄▄   
+    //   █     ▀▄ █   █ █  ▄▀ ██ ▀▀▀ █    █▀   ▀   █     ▀▄ 
+    // ▄  ▀▀▀▀▄   █▀▀▀  █▀▀▌  ██     █    ██▄▄   ▄  ▀▀▀▀▄   
+    //  ▀▄▄▄▄▀    █     █  █  ▐█    █     █▄   ▄▀ ▀▄▄▄▄▀    
+    //             █      █    ▐   ▀      ▀███▀             
+    //              ▀    ▀                                  
+    
     // add sprite at position castle
     const castlePoint = map.findObject("castle", obj => obj.name == "castle-point");
     const castle = this.physics.add.sprite(castlePoint.x, castlePoint.y, 'castle-tiles');
@@ -95,7 +162,7 @@ export default class VillageScene extends Phaser.Scene {
         obj.play('wind');
       }, [], this);
     });
-    
+
     // water rocks
     this.rocks02 = this.physics.add.group();
     const waterRockPoints02 = map.getObjectLayer("water-rocks-02")['objects'];
@@ -103,7 +170,6 @@ export default class VillageScene extends Phaser.Scene {
     waterRockPoints02.forEach(object => {
       let obj = this.rocks02.create(object.x, object.y, "water-rock-02");
       let delay = Phaser.Math.Between(0, 2000); // Random delay between 0 and 2000 milliseconds
-      obj.setOrigin(0.5, 1);
       this.time.delayedCall(delay, () => {
         obj.play('rock-anim-02');
       }, [], this);
@@ -115,32 +181,11 @@ export default class VillageScene extends Phaser.Scene {
     waterRockPoints03.forEach(object => {
       let obj = this.rocks03.create(object.x, object.y, "water-rock-03");
       let delay = Phaser.Math.Between(0, 2000); // Random delay between 0 and 2000 milliseconds
-      obj.setOrigin(0.5, 1);
       this.time.delayedCall(delay, () => {
         obj.play('rock-anim-03');
       }, [], this);
     });
 
-    this.anims.create({
-      key: 'wind',
-      frames: this.anims.generateFrameNumbers('tree', { start: 0, end: 3 }), // Assuming 6 frames in the spritesheet
-      frameRate: 7,
-      repeat: -1
-    });
-
-    this.anims.create({
-      key: 'rock-anim-02',
-      frames: this.anims.generateFrameNumbers('water-rock-02', { start: 0, end: 7 }), // Assuming 6 frames in the spritesheet
-      frameRate: 7,
-      repeat: -1
-    });
-
-    this.anims.create({
-      key: 'rock-anim-03',
-      frames: this.anims.generateFrameNumbers('water-rock-03', { start: 0, end: 7 }), // Assuming 6 frames in the spritesheet
-      frameRate: 7,
-      repeat: -1
-    });
 
     const camera = this.cameras.main;
 

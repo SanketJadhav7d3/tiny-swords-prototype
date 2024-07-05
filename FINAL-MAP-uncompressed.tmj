@@ -1371,6 +1371,19 @@
          "tilecount":32,
          "tileheight":64,
          "tilewidth":64
+        }, 
+        {
+         "columns":16,
+         "firstgid":262,
+         "image":"Tiny Swords\/Tiny Swords (Update 010)\/Terrain\/Water\/Rocks\/Rocks_03.png",
+         "imageheight":128,
+         "imagewidth":1024,
+         "margin":0,
+         "name":"Rocks_03",
+         "spacing":0,
+         "tilecount":32,
+         "tileheight":64,
+         "tilewidth":64
         }],
  "tilewidth":64,
  "type":"map",
