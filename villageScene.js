@@ -14,11 +14,13 @@
 //            ▀███▀  ▀███▀   █  █ █ ▀███▀   
 //                           █   ██         
 
-import Player from './entities/playerEntity.js';
+import Entity, { Warrior } from './entities/playerEntity.js';
+import createAnimations from './animations/animations.js';
 
 // let controls;
 let cameraSpeed = 10;
-let trees;
+var player;
+var trees;
 
 export default class VillageScene extends Phaser.Scene {
   constructor() {
@@ -42,14 +44,15 @@ export default class VillageScene extends Phaser.Scene {
     this.load.image("deco-09-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Deco/09.png");
     this.load.image("deco-03-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Deco/03.png");
 
-    this.load.spritesheet("tree", "./Tiny Swords/Tiny Swords (Update 010)/Resources/Trees/Tree.png", { frameWidth: 64 * 3, frameHeight: 64 * 3});
-    this.load.spritesheet("water-rock-02", "./Tiny Swords/Tiny Swords (Update 010)/Terrain/Water/Rocks/Rocks_02.png", { frameWidth: 64 * 2, frameHeight: 64 * 2});
+    this.load.spritesheet("tree", "./Tiny Swords/Tiny Swords (Update 010)/Resources/Trees/Tree.png", 
+      { frameWidth: 64 * 3, frameHeight: 64 * 3});
+    this.load.spritesheet("water-rock-02", "./Tiny Swords/Tiny Swords (Update 010)/Terrain/Water/Rocks/Rocks_02.png", 
+      { frameWidth: 64 * 2, frameHeight: 64 * 2});
 
-    this.load.spritesheet("water-rock-03", "./Tiny Swords/Tiny Swords (Update 010)/Terrain/Water/Rocks/Rocks_03.png", { frameWidth: 64 * 2, frameHeight: 64 * 2});
+    this.load.spritesheet("water-rock-03", "./Tiny Swords/Tiny Swords (Update 010)/Terrain/Water/Rocks/Rocks_03.png", 
+      { frameWidth: 64 * 2, frameHeight: 64 * 2});
 
     this.load.tilemapTiledJSON("map", "./FINAL-MAP-uncompressed.tmj");
-
-
     this.load.spritesheet("knight-entity", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png", 
       { frameWidth: 64*3, frameHeight: 64*3});
 
@@ -90,7 +93,8 @@ export default class VillageScene extends Phaser.Scene {
     const grassLayer2 = map.createLayer("grass 2", landTileset, 0, 0);
     const bridgeLayer = map.createLayer("bridge", bridgeTileset, 0, 0);
 
-    const decoLayer = map.createLayer("deco", [deco03Tileset, deco01Tileset, deco16Tileset, deco18Tileset, deco02Tileset, deco08Tileset, deco09Tileset], 0, 0);
+    const decoLayer = map.createLayer("deco", [deco03Tileset, deco01Tileset, deco16Tileset, 
+      deco18Tileset, deco02Tileset, deco08Tileset, deco09Tileset], 0, 0);
 
 
     // ██      ▄   ▄█ █▀▄▀█ ██     ▄▄▄▄▀ ▄█ ████▄    ▄      ▄▄▄▄▄   
@@ -101,36 +105,7 @@ export default class VillageScene extends Phaser.Scene {
     //   █  █   ██      ▀     █                   █   ██            
     //  ▀                    ▀                                      
 
-    this.anims.create({
-      key: 'wind',
-      frames: this.anims.generateFrameNumbers('tree', { start: 0, end: 3 }), // Assuming 6 frames in the spritesheet
-      frameRate: 7,
-      repeat: -1
-    });
-
-    this.anims.create({
-      key: 'knight-entity-anim',
-      frames: this.anims.generateFrameNumbers('knight-entity', { start: 0, end: 5 }), // Assuming 6 frames in the spritesheet
-      frameRate: 10,
-      repeat: -1
-    });
-
-    const player = this.physics.add.sprite(500, 500, 'knight-entity');
-    player.play('knight-entity-anim');
-
-    this.anims.create({
-      key: 'rock-anim-02',
-      frames: this.anims.generateFrameNumbers('water-rock-02', { start: 0, end: 7 }), // Assuming 6 frames in the spritesheet
-      frameRate: 7,
-      repeat: -1
-    });
-
-    this.anims.create({
-      key: 'rock-anim-03',
-      frames: this.anims.generateFrameNumbers('water-rock-03', { start: 0, end: 7 }), // Assuming 6 frames in the spritesheet
-      frameRate: 7,
-      repeat: -1
-    });
+    createAnimations(this);
 
     // ▄███▄      ▄     ▄▄▄▄▀ ▄█    ▄▄▄▄▀ ▀▄    ▄           
     // █▀   ▀      █ ▀▀▀ █    ██ ▀▀▀ █      █  █            
@@ -146,22 +121,46 @@ export default class VillageScene extends Phaser.Scene {
     //             █      █    ▐   ▀      ▀███▀             
     //              ▀    ▀                                  
     
+    // sample player
+    // const player = this.physics.add.sprite(1000, 500, 'knight-entity');
+    // player.play('knight-downward-slash-back-anim');
+    // this.player = new Warrior(this, 1000, 500, 'knight-entity');
+    // this.player.play('knight-idle-anim');
+    // this.player.setTint(0xff0000);
+
+    player = this.physics.add.sprite(1000, 500, 'knight-entity').setInteractive(this.input.makePixelPerfect());
+
+    // this.input.keyboard.on('keydown-W', () => { this.player.y -= 2});
+
     // add sprite at position castle
     const castlePoint = map.findObject("castle", obj => obj.name == "castle-point");
     const castle = this.physics.add.sprite(castlePoint.x, castlePoint.y, 'castle-tiles');
 
-    // trees
-    this.trees = this.physics.add.group();
-    const treesPoints = map.getObjectLayer("trees")['objects'];
 
-    treesPoints.forEach(object => {
-      let obj = this.trees.create(object.x, object.y, "tree");
-      let delay = Phaser.Math.Between(0, 2000); // Random delay between 0 and 2000 milliseconds
-      obj.setOrigin(0.5, 1);
-      this.time.delayedCall(delay, () => {
-        obj.play('wind');
-      }, [], this);
-    });
+    // trees
+    //trees = this.physics.add.staticGroup();
+    //const treesPoints = map.getObjectLayer("trees")['objects'];
+
+    //treesPoints.forEach(object => {
+      //let obj = trees.create(object.x, object.y, "tree");
+      //let delay = Phaser.Math.Between(0, 2000); // Random delay between 0 and 2000 milliseconds
+      // obj.setImmovable(true);
+      // obj.setOrigin(0.5, 1);
+
+      // var treeHitbox = this.physics.add.sprite(object.x, object.y - 20, 'water');
+
+      // this.physics.add.collider(this.player, treeHitbox);
+      // this.physics.add.overlap(this.player, treeHitbox, () => { console.log("overlap") }, null, this);
+
+      // treeHitbox.setSize(10, 10);
+      // treeHitbox.setTint(0xff00ff);
+      // treeHitbox.setVisible(false); // Make the hitbox invisible
+
+      //this.time.delayedCall(delay, () => {
+         //obj.play('wind');
+      //}, [], this);
+    //});
+
 
     // water rocks
     this.rocks02 = this.physics.add.group();
@@ -185,7 +184,6 @@ export default class VillageScene extends Phaser.Scene {
         obj.play('rock-anim-03');
       }, [], this);
     });
-
 
     const camera = this.cameras.main;
 
@@ -220,6 +218,26 @@ export default class VillageScene extends Phaser.Scene {
   update(time, delta) {
     this.controls.update(delta);
 
+    // this.player.update();
+
+    // temp
+    this.input.keyboard.on('keydown-W', () => { 
+      player.y -= 0.1;
+      player.play('knight-run-anim', true);
+    });
+    this.input.keyboard.on('keydown-S', () => {
+      player.y += 0.1;
+      player.play('knight-run-anim', true);
+    });
+    this.input.keyboard.on('keydown-A', () => { 
+      player.play('knight-run-anim', true);
+      player.x -= 0.1;
+    });
+    this.input.keyboard.on('keydown-D', () => { 
+      player.x += 0.1;
+      player.play('knight-run-anim', true);
+    });
+    
     // Edge scrolling with pointer position
     const scrollMargin = 200; // Adjust as needed
     const x = this.input.mousePointer.x;
