@@ -9,6 +9,7 @@ export default class Structure extends Entity {
     this.fullBodyBox.setVisible(false);
     this.setImmovable(true);
     scene.physics.add.existing(this.fullBodyBox);
+    this.depth = 1;
   }
 
   handleOverlapWith(otherEntity) {

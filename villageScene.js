@@ -25,6 +25,7 @@ var player;
 var trees;
 var cursors;
 var castle;
+var obstructions;
 
 export default class VillageScene extends Phaser.Scene {
   constructor() {
@@ -89,6 +90,7 @@ export default class VillageScene extends Phaser.Scene {
 
     // layername, tileset, pos
     const waterLayer = map.createLayer("water", waterTileset, 0, 0);
+    const waterObstructionLayer = map.createLayer("water-obstruction", waterTileset, 0, 0);
     const sandLayer = map.createLayer("sand", landTileset, 0, 0);
     const elevationLayer1 = map.createLayer("elivation 1", eleviationTileset, 0, 0);
     const grassLayer1 = map.createLayer("grass 1", landTileset, 0, 0);
@@ -129,7 +131,12 @@ export default class VillageScene extends Phaser.Scene {
 
     // add sprite at position castle
 
-    player = new Warrior(this, 1000, 500, 50, 60, 'knight-entity');
+    player = new Warrior(this, 1000, 500, 45, 60, 'knight-entity');
+    
+    waterObstructionLayer.setCollisionByExclusion([-1]);
+    this.physics.add.collider(waterObstructionLayer, player);
+
+    // layer and player overlap
 
     const castlePoint = map.findObject("castle", obj => obj.name == "castle-point");
     castle = new Structure(this, castlePoint.x, castlePoint.y, 300, 100, 'castle-tiles');
@@ -137,36 +144,36 @@ export default class VillageScene extends Phaser.Scene {
 
     this.physics.add.collider(castle, player);
     castle.handleOverlapWith(player);
-    castle.flipX = false;
 
     // this.physics.add.overlap(castle, player);
 
     // this.physics.add.overlap(player, castle, () => { console.log("overlap") }, null, this);
 
     // trees
-    //trees = this.physics.add.staticGroup();
-    //const treesPoints = map.getObjectLayer("trees")['objects'];
+    trees = this.physics.add.staticGroup();
+    const treesPoints = map.getObjectLayer("trees")['objects'];
 
-    //treesPoints.forEach(object => {
-      //let obj = trees.create(object.x, object.y, "tree");
-      //let delay = Phaser.Math.Between(0, 2000); // Random delay between 0 and 2000 milliseconds
-      // obj.setImmovable(true);
-      // obj.setOrigin(0.5, 1);
+    treesPoints.forEach(object => {
+      let obj = new Structure(this, object.x, object.y, 35, 20, "tree");
+      trees.add(obj);
+      let delay = Phaser.Math.Between(0, 2000); // Random delay between 0 and 2000 milliseconds
+      obj.setImmovable(true);
 
       // var treeHitbox = this.physics.add.sprite(object.x, object.y - 20, 'water');
+      // treeHitbox.setImmovable(true);
 
-      // this.physics.add.collider(this.player, treeHitbox);
-      // this.physics.add.overlap(this.player, treeHitbox, () => { console.log("overlap") }, null, this);
+      this.physics.add.collider(player, obj);
+      // this.physics.add.overlap(player, treeHitbox, () => { console.log("overlap") }, null, this);
 
-      // treeHitbox.setSize(10, 10);
-      // treeHitbox.setTint(0xff00ff);
+      // treeHitbox.setSize(5, 20);
+      obj.setOffset(80, 120);
       // treeHitbox.setVisible(false); // Make the hitbox invisible
+      obj.handleOverlapWith(player);
 
-      //this.time.delayedCall(delay, () => {
-         //obj.play('wind');
-      //}, [], this);
-    //});
-
+      this.time.delayedCall(delay, () => {
+        obj.play('wind');
+      }, [], this);
+    });
 
     // water rocks
     this.rocks02 = this.physics.add.group();
@@ -191,6 +198,23 @@ export default class VillageScene extends Phaser.Scene {
         obj.play('rock-anim-03');
       }, [], this);
     });
+
+    // obstructions
+    obstructions = this.physics.add.staticGroup();
+    const obstructionRects = map.getObjectLayer("obstructions")['objects'];
+
+    obstructionRects.forEach(object => {
+      // const graphics = this.add.graphics();
+      // graphics.fillStyle(0xffffff, 0); 
+      // graphics.fillRect(0, 0, object.width, object.height); 
+      // graphics.generateTexture('transparent', object.width, object.height);
+      let obj = obstructions.create(object.x + object.width / 2, object.y + object.height / 2, "transparent");
+      obj.setOrigin(0, 0);
+      obj.setSize(object.width, object.height);
+      obj.setVisible(false);
+    });
+
+    this.physics.add.collider(player, obstructions);
 
     const camera = this.cameras.main;
 
