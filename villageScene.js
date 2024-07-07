@@ -14,13 +14,14 @@
 //            ▀███▀  ▀███▀   █  █ █ ▀███▀   
 //                           █   ██         
 
-import Entity, { Warrior } from './entities/playerEntity.js';
+import Entity, { Warrior, Structure } from './entities/playerEntity.js';
 import createAnimations from './animations/animations.js';
 
 // let controls;
 let cameraSpeed = 10;
 var player;
 var trees;
+var cursors;
 
 export default class VillageScene extends Phaser.Scene {
   constructor() {
@@ -128,14 +129,25 @@ export default class VillageScene extends Phaser.Scene {
     // this.player.play('knight-idle-anim');
     // this.player.setTint(0xff0000);
 
-    player = this.physics.add.sprite(1000, 500, 'knight-entity').setInteractive(this.input.makePixelPerfect());
 
     // this.input.keyboard.on('keydown-W', () => { this.player.y -= 2});
 
     // add sprite at position castle
-    const castlePoint = map.findObject("castle", obj => obj.name == "castle-point");
-    const castle = this.physics.add.sprite(castlePoint.x, castlePoint.y, 'castle-tiles');
 
+    player = new Warrior(this, 1000, 500, 50, 60, 'knight-entity');
+
+    const castlePoint = map.findObject("castle", obj => obj.name == "castle-point");
+    const castle = new Structure(this, castlePoint.x, castlePoint.y, 300, 100, 'castle-tiles');
+
+
+
+
+    castle.handleOverlapWith(player);
+    this.physics.add.collider(castle, player);
+
+    // this.physics.add.overlap(castle, player);
+
+    // this.physics.add.overlap(player, castle, () => { console.log("overlap") }, null, this);
 
     // trees
     //trees = this.physics.add.staticGroup();
@@ -221,23 +233,10 @@ export default class VillageScene extends Phaser.Scene {
     // this.player.update();
 
     // temp
-    this.input.keyboard.on('keydown-W', () => { 
-      player.y -= 0.1;
-      player.play('knight-run-anim', true);
-    });
-    this.input.keyboard.on('keydown-S', () => {
-      player.y += 0.1;
-      player.play('knight-run-anim', true);
-    });
-    this.input.keyboard.on('keydown-A', () => { 
-      player.play('knight-run-anim', true);
-      player.x -= 0.1;
-    });
-    this.input.keyboard.on('keydown-D', () => { 
-      player.x += 0.1;
-      player.play('knight-run-anim', true);
-    });
-    
+
+    if (Math.round(time) % 5 == 0)
+      player.setVelocity(0);
+
     // Edge scrolling with pointer position
     const scrollMargin = 200; // Adjust as needed
     const x = this.input.mousePointer.x;

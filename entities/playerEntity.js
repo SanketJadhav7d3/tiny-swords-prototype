@@ -1,35 +1,59 @@
 
-export default class Entity extends Phaser.GameObjects.Sprite {
-  constructor(scene, x, y, texture) {
+export default class Entity extends Phaser.Physics.Arcade.Sprite {
+  constructor(scene, x, y, width, height, texture) {
     super(scene, x, y, texture);
     scene.add.existing(this);
     scene.physics.add.existing(this);
+
+
+    this.body.setSize(width, height);
+    // this.setOffset(offsetX, offsetY);
     // this.setCollideWorldBounds(true);
     // this.body.setCollideWorldBounds(true);
   }
+
 }
 
+export class Structure extends Entity {
+  constructor(scene, x, y, width, height, texture) {
+    super(scene, x, y, width, height, texture);
+    this.fullBodyBox = scene.physics.add.sprite(x, y, texture);
+    this.fullBodyBox.setVisible(false);
+    this.setImmovable(true);
+    scene.physics.add.existing(this.fullBodyBox);
+  }
+
+  handleOverlapWith(otherEntity) {
+    this.scene.physics.add.overlap(this.fullBodyBox, otherEntity, this.onOverlap, null, this.scene);
+  }
+
+  onOverlap(entity1, entity2) {
+    // Logic to handle overlap between entity1 and entity2
+    if (entity1.y < entity2.y) {
+      entity2.setDepth(2);
+      entity1.setDepth(1);
+    }
+  }
+}
 
 export class Warrior extends Entity {
-  constructor(scene, x, y, texture) {
-    super(scene, x, y, texture);
-    this.scene = scene;
+  constructor(scene, x, y, width, height, texture) {
+    super(scene, x, y, width, height, texture);
 
-    // temp
     this.scene.input.keyboard.on('keydown-W', () => { 
-      this.y -= 5;
+      this.setVelocityY(-300);
       this.play('knight-run-anim', true);
     });
     this.scene.input.keyboard.on('keydown-S', () => {
-      this.y += 5;
+      this.setVelocityY(300);
       this.play('knight-run-anim', true);
     });
     this.scene.input.keyboard.on('keydown-A', () => { 
       this.play('knight-run-anim', true);
-      this.x -= 5;
+      this.setVelocityX(-300);
     });
     this.scene.input.keyboard.on('keydown-D', () => { 
-      this.x += 5;
+      this.setVelocityX(300);
       this.play('knight-run-anim', true);
     });
   }
