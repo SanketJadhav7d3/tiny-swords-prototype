@@ -5,13 +5,11 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
-
     this.body.setSize(width, height);
     // this.setOffset(offsetX, offsetY);
     // this.setCollideWorldBounds(true);
     // this.body.setCollideWorldBounds(true);
   }
-
 }
 
 export class Structure extends Entity {
@@ -29,9 +27,16 @@ export class Structure extends Entity {
 
   onOverlap(entity1, entity2) {
     // Logic to handle overlap between entity1 and entity2
-    if (entity1.y < entity2.y) {
-      entity2.setDepth(2);
-      entity1.setDepth(1);
+    // 1 - structure
+    // 2 - player sprite
+
+    console.log(entity1.depth, entity2.depth);
+    if (entity2.y < entity1.y) {
+      entity2.depth = 0;
+    }
+    else {
+      console.log("down")
+      entity2.depth = 2;
     }
   }
 }

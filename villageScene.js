@@ -22,6 +22,7 @@ let cameraSpeed = 10;
 var player;
 var trees;
 var cursors;
+var castle;
 
 export default class VillageScene extends Phaser.Scene {
   constructor() {
@@ -137,13 +138,13 @@ export default class VillageScene extends Phaser.Scene {
     player = new Warrior(this, 1000, 500, 50, 60, 'knight-entity');
 
     const castlePoint = map.findObject("castle", obj => obj.name == "castle-point");
-    const castle = new Structure(this, castlePoint.x, castlePoint.y, 300, 100, 'castle-tiles');
+    castle = new Structure(this, castlePoint.x, castlePoint.y, 300, 100, 'castle-tiles');
+
+    castle.depth = 1;
 
 
-
-
-    castle.handleOverlapWith(player);
     this.physics.add.collider(castle, player);
+    castle.handleOverlapWith(player);
 
     // this.physics.add.overlap(castle, player);
 
@@ -231,8 +232,6 @@ export default class VillageScene extends Phaser.Scene {
     this.controls.update(delta);
 
     // this.player.update();
-
-    // temp
 
     if (Math.round(time) % 5 == 0)
       player.setVelocity(0);
