@@ -1,0 +1,33 @@
+
+//  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄ 
+// ▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌
+// ▐░█▀▀▀▀▀▀▀▀▀  ▀▀▀▀█░█▀▀▀▀ ▐░█▀▀▀▀▀▀▀█░▌ ▀▀▀▀█░█▀▀▀▀ ▐░█▀▀▀▀▀▀▀▀▀ ▐░█▀▀▀▀▀▀▀▀▀ 
+// ▐░▌               ▐░▌     ▐░▌       ▐░▌     ▐░▌     ▐░▌          ▐░▌          
+// ▐░█▄▄▄▄▄▄▄▄▄      ▐░▌     ▐░█▄▄▄▄▄▄▄█░▌     ▐░▌     ▐░█▄▄▄▄▄▄▄▄▄ ▐░█▄▄▄▄▄▄▄▄▄ 
+// ▐░░░░░░░░░░░▌     ▐░▌     ▐░░░░░░░░░░░▌     ▐░▌     ▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌
+//  ▀▀▀▀▀▀▀▀▀█░▌     ▐░▌     ▐░█▀▀▀▀▀▀▀█░▌     ▐░▌     ▐░█▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀█░▌
+//           ▐░▌     ▐░▌     ▐░▌       ▐░▌     ▐░▌     ▐░▌                    ▐░▌
+//  ▄▄▄▄▄▄▄▄▄█░▌     ▐░▌     ▐░▌       ▐░▌     ▐░▌     ▐░█▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄█░▌
+// ▐░░░░░░░░░░░▌     ▐░▌     ▐░▌       ▐░▌     ▐░▌     ▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌
+//  ▀▀▀▀▀▀▀▀▀▀▀       ▀       ▀         ▀       ▀       ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀ 
+//
+
+export class WarriorStates {
+  static IDLE_LEFT = "IDLE_LEFT";
+  static IDLE_RIGHT = "IDLE_RIGHT";
+
+  static UPWARD_SLASH_LEFT = "UPWARD_SLASH_LEFT";
+  static DOWNWARD_SLASH_LEFT = "DOWNWARD_SLASH_LEFT";
+
+  static RUN_RIGHT = "RUN_RIGHT";
+  static RUN_LEFT = "RUN_LEFT";
+
+  static UPWARD_SLASH_RIGHT = "UPWARD_SLASH_RIGHT";
+  static DOWNWARD_SLASH_RIGHT = "DOWNWARD_SLASH_RIGHT";
+
+  static UPWARD_SLASH_FRONT = "UPWARD_SLASH_FRONT";
+  static DOWNWARD_SLASH_FRONT = "DOWNWARD_SLASH_FRONT";
+
+  static UPWARD_SLASH_BACK = "UPWARD_SLASH_BACK";
+  static DOWNWARD_SLASH_BACK = "DOWNWARD_SLASH_BACK";
+}

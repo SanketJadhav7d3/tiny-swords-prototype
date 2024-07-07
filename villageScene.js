@@ -14,7 +14,9 @@
 //            ▀███▀  ▀███▀   █  █ █ ▀███▀   
 //                           █   ██         
 
-import Entity, { Warrior, Structure } from './entities/playerEntity.js';
+import Entity from './entities/playerEntity.js';
+import Warrior from './entities/warriorEntity.js';
+import Structure from './entities/structureEntity.js';
 import createAnimations from './animations/animations.js';
 
 // let controls;
@@ -123,15 +125,7 @@ export default class VillageScene extends Phaser.Scene {
     //             █      █    ▐   ▀      ▀███▀             
     //              ▀    ▀                                  
     
-    // sample player
-    // const player = this.physics.add.sprite(1000, 500, 'knight-entity');
-    // player.play('knight-downward-slash-back-anim');
-    // this.player = new Warrior(this, 1000, 500, 'knight-entity');
-    // this.player.play('knight-idle-anim');
-    // this.player.setTint(0xff0000);
 
-
-    // this.input.keyboard.on('keydown-W', () => { this.player.y -= 2});
 
     // add sprite at position castle
 
@@ -139,12 +133,11 @@ export default class VillageScene extends Phaser.Scene {
 
     const castlePoint = map.findObject("castle", obj => obj.name == "castle-point");
     castle = new Structure(this, castlePoint.x, castlePoint.y, 300, 100, 'castle-tiles');
-
     castle.depth = 1;
-
 
     this.physics.add.collider(castle, player);
     castle.handleOverlapWith(player);
+    castle.flipX = false;
 
     // this.physics.add.overlap(castle, player);
 
@@ -184,6 +177,7 @@ export default class VillageScene extends Phaser.Scene {
       let delay = Phaser.Math.Between(0, 2000); // Random delay between 0 and 2000 milliseconds
       this.time.delayedCall(delay, () => {
         obj.play('rock-anim-02');
+        obj.setFlipX(true);
       }, [], this);
     });
 
@@ -231,10 +225,7 @@ export default class VillageScene extends Phaser.Scene {
   update(time, delta) {
     this.controls.update(delta);
 
-    // this.player.update();
-
-    if (Math.round(time) % 5 == 0)
-      player.setVelocity(0);
+    player.update();
 
     // Edge scrolling with pointer position
     const scrollMargin = 200; // Adjust as needed
