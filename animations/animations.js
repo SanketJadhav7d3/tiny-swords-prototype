@@ -88,4 +88,47 @@ export default function createAnimations(scene) {
     frameRate: 10,
     repeat: -1
   });
+
+  //   ▄▀  ████▄ ███   █    ▄█    ▄   
+  // ▄▀    █   █ █  █  █    ██     █  
+  // █ ▀▄  █   █ █ ▀ ▄ █    ██ ██   █ 
+  // █   █ ▀████ █  ▄▀ ███▄ ▐█ █ █  █ 
+  //  ███        ███       ▀ ▐ █  █ █ 
+  //                           █   ██ 
+  //                                  
+      
+  scene.anims.create({
+    key: 'goblin-idle-anim',
+    frames: scene.anims.generateFrameNumbers('goblin-entity', { start: 0, end: 6 }), 
+    frameRate: 10,
+    repeat: -1
+  });
+
+  scene.anims.create({
+    key: 'goblin-run-anim',
+    frames: scene.anims.generateFrameNumbers('goblin-entity', { start: 7, end: 12 }), 
+    frameRate: 10,
+    repeat: -1
+  });
+
+  scene.anims.create({
+    key: 'goblin-attack-right-anim',
+    frames: scene.anims.generateFrameNumbers('goblin-entity', { start: 14, end: 19 }), 
+    frameRate: 10,
+    repeat: 0
+  });
+
+  scene.anims.create({
+    key: 'goblin-attack-front-anim',
+    frames: scene.anims.generateFrameNumbers('goblin-entity', { start: 20, end: 26 }), 
+    frameRate: 10,
+    repeat: 0
+  });
+
+  scene.anims.create({
+    key: 'goblin-attack-back-anim',
+    frames: scene.anims.generateFrameNumbers('goblin-entity', { start: 28, end: 33 }), 
+    frameRate: 10,
+    repeat: 0 
+  });
 }

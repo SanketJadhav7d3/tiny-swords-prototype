@@ -16,6 +16,7 @@
 
 import Entity from './entities/playerEntity.js';
 import Warrior from './entities/warriorEntity.js';
+import Goblin from './entities/goblinEntity.js';
 import Structure from './entities/structureEntity.js';
 import createAnimations from './animations/animations.js';
 
@@ -59,6 +60,9 @@ export default class VillageScene extends Phaser.Scene {
 
     this.load.tilemapTiledJSON("map", "./FINAL-MAP-uncompressed.tmj");
     this.load.spritesheet("knight-entity", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png", 
+      { frameWidth: 64*3, frameHeight: 64*3});
+
+    this.load.spritesheet("goblin-entity", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Goblins/Troops/Torch/Blue/Torch_Blue.png", 
       { frameWidth: 64*3, frameHeight: 64*3});
 
   }
@@ -131,7 +135,7 @@ export default class VillageScene extends Phaser.Scene {
 
     // add sprite at position castle
 
-    player = new Warrior(this, 1000, 500, 45, 60, 'knight-entity');
+    player = new Goblin(this, 1000, 500, 45, 60, 'goblin-entity');
     
     waterObstructionLayer.setCollisionByExclusion([-1]);
     this.physics.add.collider(waterObstructionLayer, player);
