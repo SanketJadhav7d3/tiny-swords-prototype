@@ -16,6 +16,8 @@
 
 import Entity from './entities/playerEntity.js';
 import Warrior from './entities/warriorEntity.js';
+import Bomber from './entities/bomberEntity.js';
+import Archer from './entities/archerEntity.js';
 import Goblin from './entities/goblinEntity.js';
 import Worker from './entities/workerEntity.js';
 import Structure from './entities/structureEntity.js';
@@ -126,11 +128,11 @@ export default class VillageScene extends Phaser.Scene {
     //  ▀▄▄▄▄▀    █     █  █  ▐█    █     █▄   ▄▀ ▀▄▄▄▄▀    
     //             █      █    ▐   ▀      ▀███▀             
     //              ▀    ▀                                  
-    
+
     // add sprite at position castle
 
-    player = new Warrior(this, 1200, 900, 45, 60, 'warrior-entity');
-    
+    player = new Bomber(this, 1200, 900, 45, 60, 'bomber-entity');
+
     waterObstructionLayer.setCollisionByExclusion([-1]);
     this.physics.add.collider(waterObstructionLayer, player);
 

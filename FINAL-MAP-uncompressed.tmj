@@ -1903,6 +1903,19 @@
          "tilecount":32,
          "tileheight":64,
          "tilewidth":64
+        }, 
+        {
+         "columns":14,
+         "firstgid":294,
+         "image":"Tiny Swords\/Tiny Swords (Update 010)\/Factions\/Knights\/Troops\/Dead\/Dead.png",
+         "imageheight":256,
+         "imagewidth":896,
+         "margin":0,
+         "name":"Dead",
+         "spacing":0,
+         "tilecount":56,
+         "tileheight":64,
+         "tilewidth":64
         }],
  "tilewidth":64,
  "type":"map",

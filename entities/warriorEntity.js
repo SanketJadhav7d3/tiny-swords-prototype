@@ -54,12 +54,15 @@ export default class Warrior extends Entity {
       this.transitionStateTo(WarriorStates.IDLE_RIGHT);
     });
 
-
     this.scene.input.keyboard.on('keydown-F', () => { 
       this.setVelocityX(0);
       this.transitionStateTo(WarriorStates.UPWARD_SLASH_BACK);
     });
 
+    this.scene.input.keyboard.on('keydown-R', () => { 
+      this.setVelocityX(0);
+      this.transitionStateTo(WarriorStates.DEAD);
+    });
   }
 
   update() {
@@ -123,6 +126,11 @@ export default class Warrior extends Entity {
     if (this.currentState == "DOWNWARD_SLASH_BACK") {
       this.setFlipX(false);
       this.play('warrior-downward-slash-back-anim', true);
+    }
+
+    if (this.currentState == "DEAD") {
+      this.setFlipX(false);
+      this.play('dead-anim', true);
     }
   }
 }
