@@ -76,7 +76,6 @@ export default class Goblin extends Entity {
   }
 
   update() {
-    console.log(this.currentState);
     if (this.currentState == "RUN_RIGHT") {
       // this.flipX = false;
       this.setFlipX(false);

@@ -17,8 +17,9 @@
 import Entity from './entities/playerEntity.js';
 import Warrior from './entities/warriorEntity.js';
 import Goblin from './entities/goblinEntity.js';
+import Worker from './entities/workerEntity.js';
 import Structure from './entities/structureEntity.js';
-import createAnimations from './animations/animations.js';
+import { loadEntitySpriteSheet, createAnimations } from './animations/animations.js';
 
 // let controls;
 let cameraSpeed = 10;
@@ -52,19 +53,14 @@ export default class VillageScene extends Phaser.Scene {
 
     this.load.spritesheet("tree", "./Tiny Swords/Tiny Swords (Update 010)/Resources/Trees/Tree.png", 
       { frameWidth: 64 * 3, frameHeight: 64 * 3});
-    this.load.spritesheet("water-rock-02", "./Tiny Swords/Tiny Swords (Update 010)/Terrain/Water/Rocks/Rocks_02.png", 
-      { frameWidth: 64 * 2, frameHeight: 64 * 2});
 
-    this.load.spritesheet("water-rock-03", "./Tiny Swords/Tiny Swords (Update 010)/Terrain/Water/Rocks/Rocks_03.png", 
-      { frameWidth: 64 * 2, frameHeight: 64 * 2});
+    //           _   _ _                      _ _          _            _      
+    //   ___ _ _| |_(_) |_ _  _   ____ __ _ _(_) |_ ___ __| |_  ___ ___| |_ ___
+    //  / -_) ' \  _| |  _| || | (_-< '_ \ '_| |  _/ -_|_-< ' \/ -_) -_)  _(_-<
+    //  \___|_||_\__|_|\__|\_, | /__/ .__/_| |_|\__\___/__/_||_\___\___|\__/__/
+    //                     |__/     |_|                                        
 
-    this.load.tilemapTiledJSON("map", "./FINAL-MAP-uncompressed.tmj");
-    this.load.spritesheet("knight-entity", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png", 
-      { frameWidth: 64*3, frameHeight: 64*3});
-
-    this.load.spritesheet("goblin-entity", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Goblins/Troops/Torch/Blue/Torch_Blue.png", 
-      { frameWidth: 64*3, frameHeight: 64*3});
-
+    loadEntitySpriteSheet(this);
   }
 
   create() {
@@ -131,11 +127,9 @@ export default class VillageScene extends Phaser.Scene {
     //             █      █    ▐   ▀      ▀███▀             
     //              ▀    ▀                                  
     
-
-
     // add sprite at position castle
 
-    player = new Goblin(this, 1000, 500, 45, 60, 'goblin-entity');
+    player = new Warrior(this, 1200, 900, 45, 60, 'warrior-entity');
     
     waterObstructionLayer.setCollisionByExclusion([-1]);
     this.physics.add.collider(waterObstructionLayer, player);
@@ -252,7 +246,6 @@ export default class VillageScene extends Phaser.Scene {
 
   update(time, delta) {
     this.controls.update(delta);
-
     player.update();
 
     // Edge scrolling with pointer position

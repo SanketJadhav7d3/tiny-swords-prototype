@@ -1,5 +1,24 @@
 
-export default function createAnimations(scene) {
+export function loadEntitySpriteSheet(scene) {
+  scene.load.spritesheet("water-rock-02", "./Tiny Swords/Tiny Swords (Update 010)/Terrain/Water/Rocks/Rocks_02.png", 
+    { frameWidth: 64 * 2, frameHeight: 64 * 2});
+
+  scene.load.spritesheet("water-rock-03", "./Tiny Swords/Tiny Swords (Update 010)/Terrain/Water/Rocks/Rocks_03.png", 
+    { frameWidth: 64 * 2, frameHeight: 64 * 2});
+
+  scene.load.tilemapTiledJSON("map", "./FINAL-MAP-uncompressed.tmj");
+
+  scene.load.spritesheet("warrior-entity", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png", 
+    { frameWidth: 64*3, frameHeight: 64*3});
+
+  scene.load.spritesheet("goblin-entity", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Goblins/Troops/Torch/Blue/Torch_Blue.png", 
+    { frameWidth: 64*3, frameHeight: 64*3});
+
+  scene.load.spritesheet("worker-entity", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Troops/Pawn/Blue/Pawn_Blue.png", 
+    { frameWidth: 64*3, frameHeight: 64*3});
+}
+
+export function createAnimations(scene) {
 
   scene.anims.create({
     key: 'wind',
@@ -34,57 +53,57 @@ export default function createAnimations(scene) {
   //                                                            
 
   scene.anims.create({
-    key: 'knight-idle-anim',
-    frames: scene.anims.generateFrameNumbers('knight-entity', { start: 0, end: 5 }), 
+    key: 'warrior-idle-anim',
+    frames: scene.anims.generateFrameNumbers('warrior-entity', { start: 0, end: 5 }), 
     frameRate: 10,
     repeat: -1
   });
 
   scene.anims.create({
-    key: 'knight-run-anim',
-    frames: scene.anims.generateFrameNumbers('knight-entity', { start: 6, end: 11 }), 
+    key: 'warrior-run-anim',
+    frames: scene.anims.generateFrameNumbers('warrior-entity', { start: 6, end: 11 }), 
     frameRate: 10,
     repeat: -1
   });
 
   scene.anims.create({
-    key: 'knight-downward-slash-right-anim',
-    frames: scene.anims.generateFrameNumbers('knight-entity', { start: 12, end: 17 }), 
+    key: 'warrior-downward-slash-right-anim',
+    frames: scene.anims.generateFrameNumbers('warrior-entity', { start: 12, end: 17 }), 
     frameRate: 10,
     repeat: -1
   });
 
   scene.anims.create({
-    key: 'knight-upward-slash-right-anim',
-    frames: scene.anims.generateFrameNumbers('knight-entity', { start: 18, end: 23 }), 
+    key: 'warrior-upward-slash-right-anim',
+    frames: scene.anims.generateFrameNumbers('warrior-entity', { start: 18, end: 23 }), 
     frameRate: 10,
     repeat: -1
   });
 
   scene.anims.create({
-    key: 'knight-downward-slash-front-anim',
-    frames: scene.anims.generateFrameNumbers('knight-entity', { start: 24, end: 29 }), 
+    key: 'warrior-downward-slash-front-anim',
+    frames: scene.anims.generateFrameNumbers('warrior-entity', { start: 24, end: 29 }), 
     frameRate: 10,
     repeat: -1
   });
 
   scene.anims.create({
-    key: 'knight-upward-slash-front-anim',
-    frames: scene.anims.generateFrameNumbers('knight-entity', { start: 30, end: 35 }), 
+    key: 'warrior-upward-slash-front-anim',
+    frames: scene.anims.generateFrameNumbers('warrior-entity', { start: 30, end: 35 }), 
     frameRate: 10,
     repeat: -1
   });
 
   scene.anims.create({
-    key: 'knight-downward-slash-back-anim',
-    frames: scene.anims.generateFrameNumbers('knight-entity', { start: 36, end: 41 }), 
+    key: 'warrior-downward-slash-back-anim',
+    frames: scene.anims.generateFrameNumbers('warrior-entity', { start: 36, end: 41 }), 
     frameRate: 10,
     repeat: -1
   });
 
   scene.anims.create({
-    key: 'knight-upward-slash-back-anim',
-    frames: scene.anims.generateFrameNumbers('knight-entity', { start: 42, end: 47 }), 
+    key: 'warrior-upward-slash-back-anim',
+    frames: scene.anims.generateFrameNumbers('warrior-entity', { start: 42, end: 47 }), 
     frameRate: 10,
     repeat: -1
   });
@@ -128,6 +147,56 @@ export default function createAnimations(scene) {
   scene.anims.create({
     key: 'goblin-attack-back-anim',
     frames: scene.anims.generateFrameNumbers('goblin-entity', { start: 28, end: 33 }), 
+    frameRate: 10,
+    repeat: 0 
+  });
+
+  // ____    __    ____  ______   .______       __  ___  _______ .______      
+  // \   \  /  \  /   / /  __  \  |   _  \     |  |/  / |   ____||   _  \     
+  //  \   \/    \/   / |  |  |  | |  |_)  |    |  '  /  |  |__   |  |_)  |    
+  //   \            /  |  |  |  | |      /     |    <   |   __|  |      /     
+  //    \    /\    /   |  `--'  | |  |\  \----.|  .  \  |  |____ |  |\  \----.
+  //     \__/  \__/     \______/  | _| `._____||__|\__\ |_______|| _| `._____|
+  //                                                                          
+
+  scene.anims.create({
+    key: 'worker-idle-anim',
+    frames: scene.anims.generateFrameNumbers('worker-entity', { start: 0, end: 5 }), 
+    frameRate: 10,
+    repeat: 0 
+  });
+
+  scene.anims.create({
+    key: 'worker-run-anim',
+    frames: scene.anims.generateFrameNumbers('worker-entity', { start: 6, end: 11 }), 
+    frameRate: 10,
+    repeat: 0 
+  });
+
+  scene.anims.create({
+    key: 'worker-hammer-anim',
+    frames: scene.anims.generateFrameNumbers('worker-entity', { start: 12, end: 17 }), 
+    frameRate: 10,
+    repeat: 0 
+  });
+
+  scene.anims.create({
+    key: 'worker-cut-anim',
+    frames: scene.anims.generateFrameNumbers('worker-entity', { start: 18, end: 23 }), 
+    frameRate: 10,
+    repeat: 0 
+  });
+
+  scene.anims.create({
+    key: 'worker-pick-gold-anim',
+    frames: scene.anims.generateFrameNumbers('worker-entity', { start: 24, end: 29 }), 
+    frameRate: 10,
+    repeat: 0 
+  });
+
+  scene.anims.create({
+    key: 'worker-pick-wood-anim',
+    frames: scene.anims.generateFrameNumbers('worker-entity', { start: 30, end: 35 }), 
     frameRate: 10,
     repeat: 0 
   });

@@ -12,7 +12,7 @@ export default class Warrior extends Entity {
   constructor(scene, x, y, width, height, texture) {
     super(scene, x, y, width, height, texture);
 
-    this.currentState = WarriorStates.IDLE_LEFT;
+    this.currentState = WarriorStates.IDLE_RIGHT;
 
     this.scene.input.keyboard.on('keydown-W', () => { 
       this.setVelocityY(-300);
@@ -53,29 +53,76 @@ export default class Warrior extends Entity {
       this.setVelocityX(0);
       this.transitionStateTo(WarriorStates.IDLE_RIGHT);
     });
+
+
+    this.scene.input.keyboard.on('keydown-F', () => { 
+      this.setVelocityX(0);
+      this.transitionStateTo(WarriorStates.UPWARD_SLASH_BACK);
+    });
+
   }
 
   update() {
     if (this.currentState == "RUN_RIGHT") {
       // this.flipX = false;
       this.setFlipX(false);
-      this.play('knight-run-anim', true);
+      this.play('warrior-run-anim', true);
     }
 
     if (this.currentState == "RUN_LEFT") {
       // this.flipX = true;
       this.setFlipX(true);
-      this.play('knight-run-anim', true);
+      this.play('warrior-run-anim', true);
     }
 
     if (this.currentState == "IDLE_LEFT") {
       this.setFlipX(true);
-      this.play('knight-idle-anim', true);
+      this.play('warrior-idle-anim', true);
     }
 
     if (this.currentState == "IDLE_RIGHT") {
       this.setFlipX(false);
-      this.play('knight-idle-anim', true);
+      this.play('warrior-idle-anim', true);
+    }
+
+    if (this.currentState == "UPWARD_SLASH_LEFT") {
+      this.setFlipX(true);
+      this.play('warrior-upward-slash-right-anim', true);
+    }
+
+    if (this.currentState == "UPWARD_SLASH_RIGHT") {
+      this.setFlipX(false);
+      this.play('warrior-upward-slash-right-anim', true);
+    }
+
+    if (this.currentState == "DOWNWARD_SLASH_RIGHT") {
+      this.setFlipX(false);
+      this.play('warrior-downward-slash-right-anim', true);
+    }
+
+    if (this.currentState == "DOWNWARD_SLASH_LEFT") {
+      this.setFlipX(true);
+      this.play('warrior-downward-slash-right-anim', true);
+    }
+
+    if (this.currentState == "UPWARD_SLASH_FRONT") {
+      this.setFlipX(false);
+      this.play('warrior-upward-slash-front-anim', true);
+    }
+
+    if (this.currentState == "DOWNWARD_SLASH_FRONT") {
+      this.setFlipX(false);
+      this.play('warrior-downward-slash-front-anim', true);
+    }
+
+    if (this.currentState == "UPWARD_SLASH_BACK") {
+      this.setFlipX(false);
+      this.play('warrior-upward-slash-back-anim', true);
+    }
+
+    if (this.currentState == "DOWNWARD_SLASH_BACK") {
+      this.setFlipX(false);
+      this.play('warrior-downward-slash-back-anim', true);
     }
   }
 }
