@@ -1,5 +1,4 @@
 
-
 //     ▄   ▄█ █    █    ██     ▄▀  ▄███▄    
 //      █  ██ █    █    █ █  ▄▀    █▀   ▀   
 // █     █ ██ █    █    █▄▄█ █ ▀▄  ██▄▄     
@@ -30,6 +29,8 @@ var trees;
 var cursors;
 var castle;
 var obstructions;
+var houses;
+var towers;
 
 export default class VillageScene extends Phaser.Scene {
   constructor() {
@@ -43,6 +44,8 @@ export default class VillageScene extends Phaser.Scene {
     this.load.image("elevation-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Terrain/Ground/Tilemap_Elevation.png");
     this.load.image("bridge-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Terrain/Bridge/Bridge_All.png");
     this.load.image("castle-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/Castle/Castle_Blue.png");
+    this.load.image("house-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/House/House_Blue.png");
+    this.load.image("tower-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/Tower/Tower_Blue.png");
 
     // deco
     this.load.image("deco-01-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Deco/01.png");
@@ -97,13 +100,14 @@ export default class VillageScene extends Phaser.Scene {
     const elevationLayer1 = map.createLayer("elivation 1", eleviationTileset, 0, 0);
     const grassLayer1 = map.createLayer("grass 1", landTileset, 0, 0);
     const grassVariationLayer1 = map.createLayer("grass variation 2", landTileset, 0, 0);
-    const elevationLayer2 = map.createLayer("elivation 2", eleviationTileset, 0, 0);
-    const grassLayer2 = map.createLayer("grass 2", landTileset, 0, 0);
+    //const elevationLayer2 = map.createLayer("elivation 2", eleviationTileset, 0, 0);
+    //const grassLayer2 = map.createLayer("grass 2", landTileset, 0, 0);
     const bridgeLayer = map.createLayer("bridge", bridgeTileset, 0, 0);
 
     const decoLayer = map.createLayer("deco", [deco03Tileset, deco01Tileset, deco16Tileset, 
       deco18Tileset, deco02Tileset, deco08Tileset, deco09Tileset], 0, 0);
 
+    // decoLayer.setDepth(3);
 
     // ██      ▄   ▄█ █▀▄▀█ ██     ▄▄▄▄▀ ▄█ ████▄    ▄      ▄▄▄▄▄   
     // █ █      █  ██ █ █ █ █ █ ▀▀▀ █    ██ █   █     █    █     ▀▄ 
@@ -132,12 +136,12 @@ export default class VillageScene extends Phaser.Scene {
     // add sprite at position castle
 
     player = new Bomber(this, 1200, 900, 45, 60, 'bomber-entity');
+    this.cameras.main.startFollow(player, true, 0.05, 0.05);
 
     waterObstructionLayer.setCollisionByExclusion([-1]);
     this.physics.add.collider(waterObstructionLayer, player);
 
     // layer and player overlap
-
     const castlePoint = map.findObject("castle", obj => obj.name == "castle-point");
     castle = new Structure(this, castlePoint.x, castlePoint.y, 300, 100, 'castle-tiles');
     castle.depth = 1;
@@ -154,7 +158,7 @@ export default class VillageScene extends Phaser.Scene {
     const treesPoints = map.getObjectLayer("trees")['objects'];
 
     treesPoints.forEach(object => {
-      let obj = new Structure(this, object.x, object.y, 35, 20, "tree");
+      let obj = new Structure(this, object.x, object.y, 35, 47, "tree");
       trees.add(obj);
       let delay = Phaser.Math.Between(0, 2000); // Random delay between 0 and 2000 milliseconds
       obj.setImmovable(true);
@@ -216,8 +220,43 @@ export default class VillageScene extends Phaser.Scene {
 
     this.physics.add.collider(player, obstructions);
 
-    const camera = this.cameras.main;
+    // houses
+    houses = this.physics.add.staticGroup();
+    const housesPoints = map.getObjectLayer("houses")['objects'];
 
+    housesPoints.forEach(object => {
+      // const graphics = this.add.graphics();
+      // graphics.fillStyle(0xffffff, 0); 
+      // graphics.fillRect(0, 0, object.width, object.height); 
+      // graphics.generateTexture('transparent', object.width, object.height);
+      // let obj = new Structure(object.x + object.width / 2, object.y + object.height / 2, "transparent");
+      let obj = new Structure(this, object.x, object.y, 100, 100, 'house-tiles');
+      obj.handleOverlapWith(player);
+      houses.add(obj);
+      // obj.setOrigin(0, 0);
+      // obj.setSize(object.width, object.height);
+      // obj.setVisible(false);
+    });
+
+    // towers
+    towers = this.physics.add.staticGroup();
+    const towersPoints = map.getObjectLayer("towers")['objects'];
+
+    towersPoints.forEach(object => {
+      // const graphics = this.add.graphics();
+      // graphics.fillStyle(0xffffff, 0); 
+      // graphics.fillRect(0, 0, object.width, object.height); 
+      // graphics.generateTexture('transparent', object.width, object.height);
+      // let obj = new Structure(object.x + object.width / 2, object.y + object.height / 2, "transparent");
+      let obj = new Structure(this, object.x, object.y, 100, 100, 'tower-tiles');
+      obj.handleOverlapWith(player);
+      towers.add(obj);
+      // obj.setOrigin(0, 0);
+      // obj.setSize(object.width, object.height);
+      // obj.setVisible(false);
+    });
+
+    const camera = this.cameras.main;
     camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
     // Set up the arrows to control the camera
