@@ -136,7 +136,7 @@ export default class VillageScene extends Phaser.Scene {
     // add sprite at position castle
 
     player = new Bomber(this, 1200, 900, 45, 60, 'bomber-entity');
-    this.cameras.main.startFollow(player, true, 0.05, 0.05);
+    // this.cameras.main.startFollow(player, true, 0.05, 0.05);
 
     waterObstructionLayer.setCollisionByExclusion([-1]);
     this.physics.add.collider(waterObstructionLayer, player);
@@ -251,9 +251,6 @@ export default class VillageScene extends Phaser.Scene {
       let obj = new Structure(this, object.x, object.y, 100, 100, 'tower-tiles');
       obj.handleOverlapWith(player);
       towers.add(obj);
-      // obj.setOrigin(0, 0);
-      // obj.setSize(object.width, object.height);
-      // obj.setVisible(false);
     });
 
     const camera = this.cameras.main;
