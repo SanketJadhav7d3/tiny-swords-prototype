@@ -47,7 +47,7 @@ export default class VillageScene extends Phaser.Scene {
     this.load.image("house-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/House/House_Blue.png");
     this.load.image("tower-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/Tower/Tower_Blue.png");
     this.load.image("cursor-img", "./Tiny Swords/Tiny Swords (Update 010)/UI/Pointers/01.png");
-        
+
 
     // deco
     this.load.image("deco-01-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Deco/01.png");
@@ -106,7 +106,12 @@ export default class VillageScene extends Phaser.Scene {
     const elevationLayer1 = map.createLayer("elivation 1", eleviationTileset, 0, 0);
 
     const grassLayer1 = map.createLayer("grass 1", landTileset, 0, 0);
+
+    const pathLayer = map.createLayer("path", landTileset, 0, 0);
+    pathLayer.setVisible(false);
+
     const pathObstruction = map.createLayer("path-obstruction", landTileset, 0, 0);
+    pathObstruction.setVisible(false);
 
     const grassVariationLayer1 = map.createLayer("grass variation 2", landTileset, 0, 0);
     //const elevationLayer2 = map.createLayer("elivation 2", eleviationTileset, 0, 0);
@@ -116,7 +121,28 @@ export default class VillageScene extends Phaser.Scene {
     const decoLayer = map.createLayer("deco", [deco03Tileset, deco01Tileset, deco16Tileset, 
       deco18Tileset, deco02Tileset, deco08Tileset, deco09Tileset], 0, 0);
 
-    // decoLayer.setDepth(3);
+    // █ ▄▄  ██     ▄▄▄▄▀ ▄  █     ▄████  ▄█    ▄   ██▄   ▄█    ▄     ▄▀          
+    // █   █ █ █ ▀▀▀ █   █   █     █▀   ▀ ██     █  █  █  ██     █  ▄▀            
+    // █▀▀▀  █▄▄█    █   ██▀▀█     █▀▀    ██ ██   █ █   █ ██ ██   █ █ ▀▄          
+    // █     █  █   █    █   █     █      ▐█ █ █  █ █  █  ▐█ █ █  █ █   █         
+    //  █       █  ▀        █       █      ▐ █  █ █ ███▀   ▐ █  █ █  ███          
+    //   ▀     █           ▀         ▀       █   ██          █   ██               
+    //        ▀                                                                    
+
+    const grid = new PF.Grid(map.width, map.height);
+
+    for (let y = 0; y < map.height; y++) {
+      for (let x = 0; x < map.width; x++) {
+        const pathTile = pathLayer.getTileAt(x, y);
+        if (pathTile == null) grid.setWalkableAt(x, y, false);
+      }
+    }
+
+    const finder = new PF.AStarFinder({
+      allowDiagonal: true,
+      dontCrossCorners: true
+    });
+
 
     // ██      ▄   ▄█ █▀▄▀█ ██     ▄▄▄▄▀ ▄█ ████▄    ▄      ▄▄▄▄▄   
     // █ █      █  ██ █ █ █ █ █ ▀▀▀ █    ██ █   █     █    █     ▀▄ 
@@ -144,13 +170,29 @@ export default class VillageScene extends Phaser.Scene {
 
     // add sprite at position castle
 
-    player = new Bomber(this, 1200, 500, 45, 60, 'bomber-entity');
+    player = new Bomber(this, 1200, 500, 45, 60, 'bomber-entity', pathLayer);
     // this.cameras.main.startFollow(player, true, 0.05, 0.05);
+
+    var tileX = pathLayer.worldToTileX(player.x);
+    var tileY = pathLayer.worldToTileX(player.y);
+
+    const path = finder.findPath(tileX, tileY, 20, 22, grid);
+
+    let index = 0;
+
+    this.input.on('pointerdown', function (pointer) {
+      var tileX = pathLayer.worldToTileX(pointer.worldX);
+      var tileY = pathLayer.worldToTileX(pointer.worldY);
+
+      console.log('Pointer clicked at world coordinates:', tileX, tileY);
+    });
+
+    // moveAlongPath(player, path, 0);
+    player.moveAlongPath(path, 0); 
 
     waterObstructionLayer.setCollisionByExclusion([-1]);
     this.physics.add.collider(waterObstructionLayer, player);
-    
-    pathObstruction.setVisible(false);
+
     pathObstruction.setCollisionByExclusion([-1]);
     this.physics.add.collider(pathObstruction, player);
 
@@ -242,7 +284,7 @@ export default class VillageScene extends Phaser.Scene {
       obj.handleOverlapWith(player);
       towers.add(obj);
     });
-    
+
     // trees
     trees = this.physics.add.staticGroup();
     const treesPoints = map.getObjectLayer("trees")['objects'];
@@ -259,7 +301,7 @@ export default class VillageScene extends Phaser.Scene {
       // this.physics.add.collider(player, obj);
       // this.physics.add.overlap(player, treeHitbox, () => { console.log("overlap") }, null, this);
       // treeHitbox.setSize(5, 20);
-      
+
       obj.setOffset(80, 120);
       // treeHitbox.setVisible(false); // Make the hitbox invisible
       obj.handleOverlapWith(player);
