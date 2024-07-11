@@ -46,6 +46,8 @@ export default class VillageScene extends Phaser.Scene {
     this.load.image("castle-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/Castle/Castle_Blue.png");
     this.load.image("house-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/House/House_Blue.png");
     this.load.image("tower-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/Tower/Tower_Blue.png");
+    this.load.image("cursor-img", "./Tiny Swords/Tiny Swords (Update 010)/UI/Pointers/01.png");
+        
 
     // deco
     this.load.image("deco-01-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Deco/01.png");
@@ -70,6 +72,10 @@ export default class VillageScene extends Phaser.Scene {
 
   create() {
     const map = this.make.tilemap({ key: "map"});
+
+    // custom cursor
+    var cursorImage = this.textures.get('cursor-img').getSourceImage();
+    this.input.setDefaultCursor(`url(${cursorImage.src}), pointer`);
 
     // █    ██  ▀▄    ▄ ▄███▄   █▄▄▄▄   ▄▄▄▄▄   
     // █    █ █   █  █  █▀   ▀  █  ▄▀  █     ▀▄ 
