@@ -10,6 +10,7 @@ export default class Structure extends Entity {
     this.setImmovable(true);
     scene.physics.add.existing(this.fullBodyBox);
     this.depth = 1;
+    this.visualOffset = 30;
   }
 
   handleOverlapWith(otherEntity) {
@@ -20,8 +21,10 @@ export default class Structure extends Entity {
     // Logic to handle overlap between entity1 and entity2
     // 1 - structure
     // 2 - player sprite
+    
+    // var structureBottomY = entity1.y + (entity1.height / 2);
 
-    if (entity2.y < entity1.y) {
+    if (entity2.y < entity1.y + 50) {
       entity2.depth = 0;
     }
     else {
@@ -30,3 +33,22 @@ export default class Structure extends Entity {
   }
 }
 
+export class Tree extends Structure {
+  constructor(scene, x, y, width, height, texture) {
+    super(scene, x, y, width, height, texture);
+
+    this.fullBodyBox.height = 200;
+    this.fullBodyBox.width = 200;
+  }
+}
+
+export class Tower extends Structure {
+  constructor(scene, x, y, width, height, texture) {
+    super(scene, x, y, width, height, texture);
+
+    this.fullBodyBox.height = 200;
+    this.fullBodyBox.width = 200;
+
+    this.visualOffset = 40;
+  }
+}

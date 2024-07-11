@@ -19,7 +19,7 @@ import Bomber from './entities/bomberEntity.js';
 import Archer from './entities/archerEntity.js';
 import Goblin from './entities/goblinEntity.js';
 import Worker from './entities/workerEntity.js';
-import Structure from './entities/structureEntity.js';
+import Structure, { Tree, Tower } from './entities/structureEntity.js';
 import { loadEntitySpriteSheet, createAnimations } from './animations/animations.js';
 
 // let controls;
@@ -98,7 +98,10 @@ export default class VillageScene extends Phaser.Scene {
     const waterObstructionLayer = map.createLayer("water-obstruction", waterTileset, 0, 0);
     const sandLayer = map.createLayer("sand", landTileset, 0, 0);
     const elevationLayer1 = map.createLayer("elivation 1", eleviationTileset, 0, 0);
+
     const grassLayer1 = map.createLayer("grass 1", landTileset, 0, 0);
+    const pathObstruction = map.createLayer("path-obstruction", landTileset, 0, 0);
+
     const grassVariationLayer1 = map.createLayer("grass variation 2", landTileset, 0, 0);
     //const elevationLayer2 = map.createLayer("elivation 2", eleviationTileset, 0, 0);
     //const grassLayer2 = map.createLayer("grass 2", landTileset, 0, 0);
@@ -135,15 +138,20 @@ export default class VillageScene extends Phaser.Scene {
 
     // add sprite at position castle
 
-    player = new Bomber(this, 1200, 900, 45, 60, 'bomber-entity');
+    player = new Bomber(this, 1200, 500, 45, 60, 'bomber-entity');
     // this.cameras.main.startFollow(player, true, 0.05, 0.05);
 
     waterObstructionLayer.setCollisionByExclusion([-1]);
     this.physics.add.collider(waterObstructionLayer, player);
+    
+    pathObstruction.setVisible(false);
+    pathObstruction.setCollisionByExclusion([-1]);
+    this.physics.add.collider(pathObstruction, player);
 
     // layer and player overlap
     const castlePoint = map.findObject("castle", obj => obj.name == "castle-point");
-    castle = new Structure(this, castlePoint.x, castlePoint.y, 300, 100, 'castle-tiles');
+
+    castle = new Structure(this, castlePoint.x, castlePoint.y, 300, 150, 'castle-tiles');
     castle.depth = 1;
 
     this.physics.add.collider(castle, player);
@@ -152,32 +160,6 @@ export default class VillageScene extends Phaser.Scene {
     // this.physics.add.overlap(castle, player);
 
     // this.physics.add.overlap(player, castle, () => { console.log("overlap") }, null, this);
-
-    // trees
-    trees = this.physics.add.staticGroup();
-    const treesPoints = map.getObjectLayer("trees")['objects'];
-
-    treesPoints.forEach(object => {
-      let obj = new Structure(this, object.x, object.y, 35, 47, "tree");
-      trees.add(obj);
-      let delay = Phaser.Math.Between(0, 2000); // Random delay between 0 and 2000 milliseconds
-      obj.setImmovable(true);
-
-      // var treeHitbox = this.physics.add.sprite(object.x, object.y - 20, 'water');
-      // treeHitbox.setImmovable(true);
-
-      this.physics.add.collider(player, obj);
-      // this.physics.add.overlap(player, treeHitbox, () => { console.log("overlap") }, null, this);
-
-      // treeHitbox.setSize(5, 20);
-      obj.setOffset(80, 120);
-      // treeHitbox.setVisible(false); // Make the hitbox invisible
-      obj.handleOverlapWith(player);
-
-      this.time.delayedCall(delay, () => {
-        obj.play('wind');
-      }, [], this);
-    });
 
     // water rocks
     this.rocks02 = this.physics.add.group();
@@ -231,6 +213,7 @@ export default class VillageScene extends Phaser.Scene {
       // graphics.generateTexture('transparent', object.width, object.height);
       // let obj = new Structure(object.x + object.width / 2, object.y + object.height / 2, "transparent");
       let obj = new Structure(this, object.x, object.y, 100, 100, 'house-tiles');
+      this.physics.add.collider(player, obj);
       obj.handleOverlapWith(player);
       houses.add(obj);
       // obj.setOrigin(0, 0);
@@ -248,10 +231,38 @@ export default class VillageScene extends Phaser.Scene {
       // graphics.fillRect(0, 0, object.width, object.height); 
       // graphics.generateTexture('transparent', object.width, object.height);
       // let obj = new Structure(object.x + object.width / 2, object.y + object.height / 2, "transparent");
-      let obj = new Structure(this, object.x, object.y, 100, 100, 'tower-tiles');
+      let obj = new Tower(this, object.x, object.y, 100, 100, 'tower-tiles');
+      this.physics.add.collider(player, obj);
       obj.handleOverlapWith(player);
       towers.add(obj);
     });
+    
+    // trees
+    trees = this.physics.add.staticGroup();
+    const treesPoints = map.getObjectLayer("trees")['objects'];
+
+    treesPoints.forEach(object => {
+      let obj = new Tree(this, object.x, object.y, 35, 47, "tree");
+      trees.add(obj);
+      let delay = Phaser.Math.Between(0, 2000); // Random delay between 0 and 2000 milliseconds
+      obj.setImmovable(true);
+
+      // var treeHitbox = this.physics.add.sprite(object.x, object.y - 20, 'water');
+      // treeHitbox.setImmovable(true);
+
+      // this.physics.add.collider(player, obj);
+      // this.physics.add.overlap(player, treeHitbox, () => { console.log("overlap") }, null, this);
+      // treeHitbox.setSize(5, 20);
+      
+      obj.setOffset(80, 120);
+      // treeHitbox.setVisible(false); // Make the hitbox invisible
+      obj.handleOverlapWith(player);
+
+      this.time.delayedCall(delay, () => {
+        obj.play('wind');
+      }, [], this);
+    });
+
 
     const camera = this.cameras.main;
     camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
