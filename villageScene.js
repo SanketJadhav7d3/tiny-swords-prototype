@@ -19,7 +19,7 @@ import Bomber from './entities/bomberEntity.js';
 import Archer from './entities/archerEntity.js';
 import Goblin from './entities/goblinEntity.js';
 import Worker from './entities/workerEntity.js';
-import Structure, { Tree, Tower } from './entities/structureEntity.js';
+import Structure, { Tree, Tower, Castle } from './entities/structureEntity.js';
 import { loadEntitySpriteSheet, createAnimations } from './animations/animations.js';
 
 // let controls;
@@ -43,11 +43,19 @@ export default class VillageScene extends Phaser.Scene {
     this.load.image("land-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Terrain/Ground/Tilemap_Flat.png");
     this.load.image("elevation-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Terrain/Ground/Tilemap_Elevation.png");
     this.load.image("bridge-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Terrain/Bridge/Bridge_All.png");
-    this.load.image("castle-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/Castle/Castle_Blue.png");
     this.load.image("house-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/House/House_Blue.png");
-    this.load.image("tower-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/Tower/Tower_Blue.png");
-    this.load.image("cursor-img", "./Tiny Swords/Tiny Swords (Update 010)/UI/Pointers/01.png");
 
+    // castles 
+    this.load.image("castle-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/Castle/Castle_Blue.png");
+    this.load.image("castle-construct-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/Castle/Castle_Construction.png");
+    this.load.image("castle-destroyed-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/Castle/Castle_Destroyed.png");
+
+    // towers
+    this.load.image("tower-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/Tower/Tower_Blue.png");
+    this.load.image("tower-construct-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/Tower/Tower_Construction.png");
+    this.load.image("tower-destroyed-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/Tower/Tower_Destroyed.png");
+
+    this.load.image("cursor-img", "./Tiny Swords/Tiny Swords (Update 010)/UI/Pointers/01.png");
 
     // deco
     this.load.image("deco-01-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Deco/01.png");
@@ -170,7 +178,7 @@ export default class VillageScene extends Phaser.Scene {
 
     // add sprite at position castle
 
-    player = new Bomber(this, 1200, 500, 45, 60, 'bomber-entity', pathLayer);
+    player = new Goblin(this, 1200, 500, 45, 60, 'goblin-entity', pathLayer);
     // this.cameras.main.startFollow(player, true, 0.05, 0.05);
 
     var tileX = pathLayer.worldToTileX(player.x);
@@ -188,18 +196,18 @@ export default class VillageScene extends Phaser.Scene {
     });
 
     // moveAlongPath(player, path, 0);
-    player.moveAlongPath(path, 0); 
+    // player.moveAlongPath(path, 0); 
 
     waterObstructionLayer.setCollisionByExclusion([-1]);
     this.physics.add.collider(waterObstructionLayer, player);
 
-    pathObstruction.setCollisionByExclusion([-1]);
-    this.physics.add.collider(pathObstruction, player);
+    // pathObstruction.setCollisionByExclusion([-1]);
+    // this.physics.add.collider(pathObstruction, player);
 
     // layer and player overlap
     const castlePoint = map.findObject("castle", obj => obj.name == "castle-point");
 
-    castle = new Structure(this, castlePoint.x, castlePoint.y, 300, 150, 'castle-tiles');
+    castle = new Castle(this, castlePoint.x, castlePoint.y, 300, 150, 'castle-tiles');
     castle.depth = 1;
 
     this.physics.add.collider(castle, player);
@@ -271,6 +279,7 @@ export default class VillageScene extends Phaser.Scene {
 
     // towers
     towers = this.physics.add.staticGroup();
+
     const towersPoints = map.getObjectLayer("towers")['objects'];
 
     towersPoints.forEach(object => {
@@ -286,7 +295,7 @@ export default class VillageScene extends Phaser.Scene {
     });
 
     // trees
-    trees = this.physics.add.staticGroup();
+    trees = this.physics.add.group();
     const treesPoints = map.getObjectLayer("trees")['objects'];
 
     treesPoints.forEach(object => {
@@ -344,6 +353,13 @@ export default class VillageScene extends Phaser.Scene {
   update(time, delta) {
     this.controls.update(delta);
     player.update();
+
+
+    castle.update();
+
+    towers.children.iterate((child) => {
+      child.update();
+    });
 
     // Edge scrolling with pointer position
     const scrollMargin = 200; // Adjust as needed

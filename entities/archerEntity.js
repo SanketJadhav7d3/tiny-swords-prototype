@@ -4,60 +4,10 @@ import Entity from './playerEntity.js'
 import { ArcherStates } from './states.js';
 
 export default class Archer extends Entity {
-  constructor(scene, x, y, width, height, texture) {
-    super(scene, x, y, width, height, texture);
+  constructor(scene, x, y, width, height, texture, pathLayer) {
+    super(scene, x, y, width, height, texture, pathLayer);
 
     this.currentState = ArcherStates.IDLE_RIGHT;
-
-    this.scene.input.keyboard.on('keydown-W', () => { 
-      this.setVelocityY(-300);
-      this.transitionStateTo(ArcherStates.RUN_RIGHT);
-    });
-
-    this.scene.input.keyboard.on('keydown-S', () => {
-      this.setVelocityY(300);
-      this.transitionStateTo(ArcherStates.RUN_RIGHT);
-    });
-
-    this.scene.input.keyboard.on('keydown-A', () => { 
-      this.setVelocityX(-300);
-      this.transitionStateTo(ArcherStates.RUN_LEFT);
-    });
-
-    this.scene.input.keyboard.on('keydown-D', () => { 
-      this.setVelocityX(300);
-      this.transitionStateTo(ArcherStates.RUN_RIGHT);
-    });
-
-    this.scene.input.keyboard.on('keyup-W', () => { 
-      this.setVelocityY(0);
-      this.transitionStateTo(ArcherStates.IDLE_LEFT);
-    });
-
-    this.scene.input.keyboard.on('keyup-S', () => {
-      this.setVelocityY(0);
-      this.transitionStateTo(ArcherStates.IDLE_LEFT);
-    });
-
-    this.scene.input.keyboard.on('keyup-A', () => { 
-      this.setVelocityX(0);
-      this.transitionStateTo(ArcherStates.IDLE_LEFT);
-    });
-
-    this.scene.input.keyboard.on('keyup-D', () => { 
-      this.setVelocityX(0);
-      this.transitionStateTo(ArcherStates.IDLE_RIGHT);
-    });
-
-    this.scene.input.keyboard.on('keydown-F', () => { 
-      this.setVelocityX(0);
-      // this.transitionStateTo(ArcherStates.UPWARD_SLASH_BACK);
-    });
-
-    this.scene.input.keyboard.on('keydown-R', () => { 
-      this.setVelocityX(0);
-      this.transitionStateTo(ArcherStates.DEAD);
-    });
   }
 
   update() {

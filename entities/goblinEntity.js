@@ -24,8 +24,8 @@ import Entity from './playerEntity.js'
 import { GoblinStates } from './states.js';
 
 export default class Goblin extends Entity {
-  constructor(scene, x, y, width, height, texture) {
-    super(scene, x, y, width, height, texture);
+  constructor(scene, x, y, width, height, texture, pathLayer) {
+    super(scene, x, y, width, height, texture, pathLayer);
 
     this.currentState = GoblinStates.IDLE_LEFT;
 

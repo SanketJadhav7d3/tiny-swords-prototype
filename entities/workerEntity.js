@@ -4,55 +4,11 @@ import Entity from './playerEntity.js'
 import { WorkerStates } from './states.js';
 
 export default class Worker extends Entity {
-  constructor(scene, x, y, width, height, texture) {
-    super(scene, x, y, width, height, texture);
+  constructor(scene, x, y, width, height, texture, pathLayer) {
+    super(scene, x, y, width, height, texture, pathLayer);
 
     this.currentState = WorkerStates.IDLE_LEFT;
 
-    this.scene.input.keyboard.on('keydown-W', () => { 
-      this.setVelocityY(-300);
-      this.transitionStateTo(WorkerStates.RUN_RIGHT);
-    });
-
-    this.scene.input.keyboard.on('keydown-S', () => {
-      this.setVelocityY(300);
-      this.transitionStateTo(WorkerStates.RUN_RIGHT);
-    });
-
-    this.scene.input.keyboard.on('keydown-A', () => { 
-      this.setVelocityX(-300);
-      this.transitionStateTo(WorkerStates.RUN_LEFT);
-    });
-
-    this.scene.input.keyboard.on('keydown-D', () => { 
-      this.setVelocityX(300);
-      this.transitionStateTo(WorkerStates.RUN_RIGHT);
-    });
-
-    this.scene.input.keyboard.on('keyup-W', () => { 
-      this.setVelocityY(0);
-      this.transitionStateTo(WorkerStates.IDLE_LEFT);
-    });
-
-    this.scene.input.keyboard.on('keyup-S', () => {
-      this.setVelocityY(0);
-      this.transitionStateTo(WorkerStates.IDLE_LEFT);
-    });
-
-    this.scene.input.keyboard.on('keyup-A', () => { 
-      this.setVelocityX(0);
-      this.transitionStateTo(WorkerStates.IDLE_LEFT);
-    });
-
-    this.scene.input.keyboard.on('keyup-D', () => { 
-      this.setVelocityX(0);
-      this.transitionStateTo(WorkerStates.IDLE_RIGHT);
-    });
-
-    this.scene.input.keyboard.on('keydown-F', () => { 
-      this.setVelocityX(0);
-      this.transitionStateTo(WorkerStates.HAMMER_LEFT);
-    });
   }
 
   update() {

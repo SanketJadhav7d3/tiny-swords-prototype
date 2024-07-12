@@ -54,10 +54,16 @@ export class WorkerStates extends EntityStates {
 }
 
 export class ArcherStates extends EntityStates {
-
 }
 
 export class BomberStates extends EntityStates {
   static THROW_RIGHT = "THROW_RIGHT";
   static THROW_LEFT = "THROW_LEFT";
+}
+
+export class StructureStates {
+  static ATTACKED = "ATTACKED";
+  static BUILT = "BUILT";
+  static DESTROYED = "DESTROYED";
+  static CONSTRUCT = "CONSTRUCT";
 }

@@ -9,8 +9,8 @@ import Entity from './playerEntity.js'
 import { WarriorStates } from './states.js';
 
 export default class Warrior extends Entity {
-  constructor(scene, x, y, width, height, texture) {
-    super(scene, x, y, width, height, texture);
+  constructor(scene, x, y, width, height, texture, pathLayer) {
+    super(scene, x, y, width, height, texture, pathLayer);
 
     this.currentState = WarriorStates.IDLE_RIGHT;
 
