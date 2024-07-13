@@ -19,7 +19,8 @@ import Bomber from './entities/bomberEntity.js';
 import Archer from './entities/archerEntity.js';
 import Goblin from './entities/goblinEntity.js';
 import Worker from './entities/workerEntity.js';
-import Structure, { Tree, Tower, Castle } from './entities/structureEntity.js';
+import PlayerArmy from './entities/playerArmy.js';
+import Structure, { Tree, Tower, Castle, House } from './entities/structureEntity.js';
 import { loadEntitySpriteSheet, createAnimations } from './animations/animations.js';
 
 // let controls;
@@ -31,6 +32,7 @@ var castle;
 var obstructions;
 var houses;
 var towers;
+var playerArmy;
 
 export default class VillageScene extends Phaser.Scene {
   constructor() {
@@ -43,7 +45,6 @@ export default class VillageScene extends Phaser.Scene {
     this.load.image("land-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Terrain/Ground/Tilemap_Flat.png");
     this.load.image("elevation-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Terrain/Ground/Tilemap_Elevation.png");
     this.load.image("bridge-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Terrain/Bridge/Bridge_All.png");
-    this.load.image("house-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/House/House_Blue.png");
 
     // castles 
     this.load.image("castle-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/Castle/Castle_Blue.png");
@@ -54,6 +55,12 @@ export default class VillageScene extends Phaser.Scene {
     this.load.image("tower-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/Tower/Tower_Blue.png");
     this.load.image("tower-construct-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/Tower/Tower_Construction.png");
     this.load.image("tower-destroyed-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/Tower/Tower_Destroyed.png");
+
+
+    // house
+    this.load.image("house-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/House/House_Blue.png");
+    this.load.image("house-construct-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/House/House_Construction.png");
+    this.load.image("house-destroyed-tiles", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/House/House_Destroyed.png");
 
     this.load.image("cursor-img", "./Tiny Swords/Tiny Swords (Update 010)/UI/Pointers/01.png");
 
@@ -137,18 +144,18 @@ export default class VillageScene extends Phaser.Scene {
     //   ▀     █           ▀         ▀       █   ██          █   ██               
     //        ▀                                                                    
 
-    const grid = new PF.Grid(map.width, map.height);
+    var grid = new PF.Grid(map.width, map.height);
 
     for (let y = 0; y < map.height; y++) {
       for (let x = 0; x < map.width; x++) {
         const pathTile = pathLayer.getTileAt(x, y);
         if (pathTile == null) grid.setWalkableAt(x, y, false);
+        else grid.setWalkableAt(x, y, true);
       }
     }
 
-    const finder = new PF.AStarFinder({
+    var finder = new PF.AStarFinder({
       allowDiagonal: true,
-      dontCrossCorners: true
     });
 
 
@@ -176,46 +183,20 @@ export default class VillageScene extends Phaser.Scene {
     //             █      █    ▐   ▀      ▀███▀             
     //              ▀    ▀                                  
 
-    // add sprite at position castle
 
-    player = new Goblin(this, 1200, 500, 45, 60, 'goblin-entity', pathLayer);
-    // this.cameras.main.startFollow(player, true, 0.05, 0.05);
-
-    var tileX = pathLayer.worldToTileX(player.x);
-    var tileY = pathLayer.worldToTileX(player.y);
-
-    const path = finder.findPath(tileX, tileY, 20, 22, grid);
-
-    let index = 0;
-
-    this.input.on('pointerdown', function (pointer) {
-      var tileX = pathLayer.worldToTileX(pointer.worldX);
-      var tileY = pathLayer.worldToTileX(pointer.worldY);
-
-      console.log('Pointer clicked at world coordinates:', tileX, tileY);
-    });
-
-    // moveAlongPath(player, path, 0);
-    // player.moveAlongPath(path, 0); 
+    playerArmy = new PlayerArmy(this, pathLayer, finder, grid);
 
     waterObstructionLayer.setCollisionByExclusion([-1]);
-    this.physics.add.collider(waterObstructionLayer, player);
-
-    // pathObstruction.setCollisionByExclusion([-1]);
-    // this.physics.add.collider(pathObstruction, player);
-
+    // this.physics.add.collider(waterObstructionLayer, player);
+    
     // layer and player overlap
     const castlePoint = map.findObject("castle", obj => obj.name == "castle-point");
 
     castle = new Castle(this, castlePoint.x, castlePoint.y, 300, 150, 'castle-tiles');
     castle.depth = 1;
 
-    this.physics.add.collider(castle, player);
-    castle.handleOverlapWith(player);
-
-    // this.physics.add.overlap(castle, player);
-
-    // this.physics.add.overlap(player, castle, () => { console.log("overlap") }, null, this);
+    // this.physics.add.collider(castle, player);
+    // castle.handleOverlapWith(player);
 
     // water rocks
     this.rocks02 = this.physics.add.group();
@@ -256,7 +237,7 @@ export default class VillageScene extends Phaser.Scene {
       obj.setVisible(false);
     });
 
-    this.physics.add.collider(player, obstructions);
+    // this.physics.add.collider(player, obstructions);
 
     // houses
     houses = this.physics.add.staticGroup();
@@ -268,9 +249,9 @@ export default class VillageScene extends Phaser.Scene {
       // graphics.fillRect(0, 0, object.width, object.height); 
       // graphics.generateTexture('transparent', object.width, object.height);
       // let obj = new Structure(object.x + object.width / 2, object.y + object.height / 2, "transparent");
-      let obj = new Structure(this, object.x, object.y, 100, 100, 'house-tiles');
-      this.physics.add.collider(player, obj);
-      obj.handleOverlapWith(player);
+      let obj = new House(this, object.x, object.y, 100, 100, 'house-tiles');
+      // this.physics.add.collider(player, obj);
+      // obj.handleOverlapWith(player);
       houses.add(obj);
       // obj.setOrigin(0, 0);
       // obj.setSize(object.width, object.height);
@@ -283,14 +264,14 @@ export default class VillageScene extends Phaser.Scene {
     const towersPoints = map.getObjectLayer("towers")['objects'];
 
     towersPoints.forEach(object => {
-      // const graphics = this.add.graphics();
-      // graphics.fillStyle(0xffffff, 0); 
-      // graphics.fillRect(0, 0, object.width, object.height); 
-      // graphics.generateTexture('transparent', object.width, object.height);
-      // let obj = new Structure(object.x + object.width / 2, object.y + object.height / 2, "transparent");
+
       let obj = new Tower(this, object.x, object.y, 100, 100, 'tower-tiles');
-      this.physics.add.collider(player, obj);
-      obj.handleOverlapWith(player);
+
+      playerArmy.warriors.children.iterate((child) => {
+        this.physics.add.collider(player, obj);
+        obj.handleOverlapWith(child);
+      });
+
       towers.add(obj);
     });
 
@@ -313,13 +294,22 @@ export default class VillageScene extends Phaser.Scene {
 
       obj.setOffset(80, 120);
       // treeHitbox.setVisible(false); // Make the hitbox invisible
-      obj.handleOverlapWith(player);
+
+      playerArmy.warriors.children.iterate((child) => {
+        obj.handleOverlapWith(child);
+      });
 
       this.time.delayedCall(delay, () => {
         obj.play('wind');
       }, [], this);
     });
 
+    this.input.on('pointerdown', function (pointer) {
+      var tileX = pathLayer.worldToTileX(pointer.worldX);
+      var tileY = pathLayer.worldToTileX(pointer.worldY);
+
+      console.log('Pointer clicked at world coordinates:', tileX, tileY);
+    });
 
     const camera = this.cameras.main;
     camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
@@ -352,12 +342,18 @@ export default class VillageScene extends Phaser.Scene {
 
   update(time, delta) {
     this.controls.update(delta);
-    player.update();
-
+    
+    // player.update();
+    playerArmy.update();
 
     castle.update();
 
     towers.children.iterate((child) => {
+      child.update();
+    });
+
+
+    houses.children.iterate((child) => {
       child.update();
     });
 

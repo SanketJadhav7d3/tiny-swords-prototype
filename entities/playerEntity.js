@@ -12,7 +12,7 @@
 
 
 export default class Entity extends Phaser.Physics.Arcade.Sprite {
-  constructor(scene, x, y, width, height, texture, pathLayer) {
+  constructor(scene, x, y, width, height, texture, pathLayer, finder) {
     super(scene, x, y, texture);
     scene.add.existing(this);
     scene.physics.add.existing(this);
@@ -20,6 +20,8 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
     this.pathLayer = pathLayer;
 
     this.currentState = null;
+
+    this.finder = finder;
 
     this.body.setSize(width, height);
     // this.setOffset(offsetX, offsetY);
@@ -29,6 +31,18 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
 
   transitionStateTo(state) {
     this.currentState = state;
+  }
+
+  moveToTile(tileX, tileY, grid) {
+    var playerTileX = this.pathLayer.worldToTileX(this.x);
+    var playerTileY = this.pathLayer.worldToTileX(this.y);
+
+    var gridClone = grid.clone();
+
+    var path = this.finder.findPath(playerTileX, playerTileY, tileX, tileY, gridClone);
+
+
+    this.moveAlongPath(path, 0);
   }
 
   moveAlongPath(path, index) {
@@ -52,9 +66,9 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
 
     // Play walking animation
     if (worldX > this.x)
-      this.transitionStateTo('RUN_RIGHT');
+    this.transitionStateTo('RUN_RIGHT');
     else
-      this.transitionStateTo('RUN_LEFT');
+    this.transitionStateTo('RUN_LEFT');
 
     // Create tween to move the sprite to the next tile
     this.scene.tweens.add({

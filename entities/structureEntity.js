@@ -60,11 +60,28 @@ export class Castle extends Structure {
   }
 }
 
+export class House extends Structure {
+  constructor(scene, x, y, width, height, texture) {
+    super(scene, x, y, width, height, texture);
+    this.currentState = StructureStates.DESTROYED;
+  }
+
+  update() {
+    if (this.currentState == StructureStates.BUILT) {
+      this.setTexture('house-tiles');
+    } else if (this.currentState == StructureStates.CONSTRUCT) {
+      this.setTexture('house-construct-tiles');
+    } else if  (this.currentState == StructureStates.DESTROYED) {
+      this.setTexture('house-destroyed-tiles');
+    }
+  }
+}
+
 export class Tower extends Structure {
   constructor(scene, x, y, width, height, texture) {
     super(scene, x, y, width, height, texture);
-    this.currentState = StructureStates.CONSTRUCT;
-
+    this.currentState = StructureStates.BUILT;
+    this.visualOffset = 80;
   }
 
   update() {

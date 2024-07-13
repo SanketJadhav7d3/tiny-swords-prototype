@@ -9,60 +9,61 @@ import Entity from './playerEntity.js'
 import { WarriorStates } from './states.js';
 
 export default class Warrior extends Entity {
-  constructor(scene, x, y, width, height, texture, pathLayer) {
-    super(scene, x, y, width, height, texture, pathLayer);
+  constructor(scene, x, y, width, height, texture, pathLayer, finder) {
+
+    super(scene, x, y, width, height, texture, pathLayer, finder);
 
     this.currentState = WarriorStates.IDLE_RIGHT;
 
-    this.scene.input.keyboard.on('keydown-W', () => { 
-      this.setVelocityY(-300);
-      this.transitionStateTo(WarriorStates.RUN_RIGHT);
-    });
+    // this.scene.input.keyboard.on('keydown-W', () => { 
+      // this.setVelocityY(-300);
+      // this.transitionStateTo(WarriorStates.RUN_RIGHT);
+    // });
 
-    this.scene.input.keyboard.on('keydown-S', () => {
-      this.setVelocityY(300);
-      this.transitionStateTo(WarriorStates.RUN_RIGHT);
-    });
+    // this.scene.input.keyboard.on('keydown-S', () => {
+      // this.setVelocityY(300);
+      // this.transitionStateTo(WarriorStates.RUN_RIGHT);
+    // });
 
-    this.scene.input.keyboard.on('keydown-A', () => { 
-      this.setVelocityX(-300);
-      this.transitionStateTo(WarriorStates.RUN_LEFT);
-    });
+    // this.scene.input.keyboard.on('keydown-A', () => { 
+      // this.setVelocityX(-300);
+      // this.transitionStateTo(WarriorStates.RUN_LEFT);
+    // });
 
-    this.scene.input.keyboard.on('keydown-D', () => { 
-      this.setVelocityX(300);
-      this.transitionStateTo(WarriorStates.RUN_RIGHT);
-    });
+    // this.scene.input.keyboard.on('keydown-D', () => { 
+      // this.setVelocityX(300);
+      // this.transitionStateTo(WarriorStates.RUN_RIGHT);
+    // });
 
-    this.scene.input.keyboard.on('keyup-W', () => { 
-      this.setVelocityY(0);
-      this.transitionStateTo(WarriorStates.IDLE_LEFT);
-    });
+    // this.scene.input.keyboard.on('keyup-W', () => { 
+      // this.setVelocityY(0);
+      // this.transitionStateTo(WarriorStates.IDLE_LEFT);
+    // });
 
-    this.scene.input.keyboard.on('keyup-S', () => {
-      this.setVelocityY(0);
-      this.transitionStateTo(WarriorStates.IDLE_LEFT);
-    });
+    // this.scene.input.keyboard.on('keyup-S', () => {
+      // this.setVelocityY(0);
+      // this.transitionStateTo(WarriorStates.IDLE_LEFT);
+    // });
 
-    this.scene.input.keyboard.on('keyup-A', () => { 
-      this.setVelocityX(0);
-      this.transitionStateTo(WarriorStates.IDLE_LEFT);
-    });
+    // this.scene.input.keyboard.on('keyup-A', () => { 
+      // this.setVelocityX(0);
+      // this.transitionStateTo(WarriorStates.IDLE_LEFT);
+    // });
 
-    this.scene.input.keyboard.on('keyup-D', () => { 
-      this.setVelocityX(0);
-      this.transitionStateTo(WarriorStates.IDLE_RIGHT);
-    });
+    // this.scene.input.keyboard.on('keyup-D', () => { 
+      // this.setVelocityX(0);
+      // this.transitionStateTo(WarriorStates.IDLE_RIGHT);
+    // });
 
-    this.scene.input.keyboard.on('keydown-F', () => { 
-      this.setVelocityX(0);
-      this.transitionStateTo(WarriorStates.UPWARD_SLASH_BACK);
-    });
+    // this.scene.input.keyboard.on('keydown-F', () => { 
+      // this.setVelocityX(0);
+      // this.transitionStateTo(WarriorStates.UPWARD_SLASH_BACK);
+    // });
 
-    this.scene.input.keyboard.on('keydown-R', () => { 
-      this.setVelocityX(0);
-      this.transitionStateTo(WarriorStates.DEAD);
-    });
+    // this.scene.input.keyboard.on('keydown-R', () => { 
+      // this.setVelocityX(0);
+      // this.transitionStateTo(WarriorStates.DEAD);
+    // });
   }
 
   update() {
