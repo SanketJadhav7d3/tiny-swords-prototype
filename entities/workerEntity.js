@@ -4,8 +4,9 @@ import Entity from './playerEntity.js'
 import { WorkerStates } from './states.js';
 
 export default class Worker extends Entity {
-  constructor(scene, x, y, width, height, texture, pathLayer) {
-    super(scene, x, y, width, height, texture, pathLayer);
+  constructor(scene, x, y, width, height, pathLayer, finder) {
+
+    super(scene, x, y, width, height, 'worker-entity', pathLayer, finder);
 
     this.currentState = WorkerStates.IDLE_LEFT;
 

@@ -20,6 +20,7 @@ import Archer from './entities/archerEntity.js';
 import Goblin from './entities/goblinEntity.js';
 import Worker from './entities/workerEntity.js';
 import PlayerArmy from './entities/playerArmy.js';
+import EnemyArmy from './entities/enemyArmy.js';
 import Structure, { Tree, Tower, Castle, House } from './entities/structureEntity.js';
 import { loadEntitySpriteSheet, createAnimations } from './animations/animations.js';
 
@@ -33,6 +34,7 @@ var obstructions;
 var houses;
 var towers;
 var playerArmy;
+var enemyArmy;
 
 export default class VillageScene extends Phaser.Scene {
   constructor() {
@@ -185,6 +187,7 @@ export default class VillageScene extends Phaser.Scene {
 
 
     playerArmy = new PlayerArmy(this, pathLayer, finder, grid);
+    enemyArmy = new EnemyArmy(this, pathLayer, finder, grid);
 
     waterObstructionLayer.setCollisionByExclusion([-1]);
     // this.physics.add.collider(waterObstructionLayer, player);
@@ -268,7 +271,7 @@ export default class VillageScene extends Phaser.Scene {
       let obj = new Tower(this, object.x, object.y, 100, 100, 'tower-tiles');
 
       playerArmy.warriors.children.iterate((child) => {
-        this.physics.add.collider(player, obj);
+        this.physics.add.collider(child, obj);
         obj.handleOverlapWith(child);
       });
 
@@ -345,6 +348,8 @@ export default class VillageScene extends Phaser.Scene {
     
     // player.update();
     playerArmy.update();
+
+    enemyArmy.update();
 
     castle.update();
 

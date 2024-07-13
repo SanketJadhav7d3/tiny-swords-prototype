@@ -4,8 +4,9 @@ import Entity from './playerEntity.js'
 import { ArcherStates } from './states.js';
 
 export default class Archer extends Entity {
-  constructor(scene, x, y, width, height, texture, pathLayer) {
-    super(scene, x, y, width, height, texture, pathLayer);
+  constructor(scene, x, y, width, height, pathLayer, finder) {
+    
+    super(scene, x, y, width, height, 'archer-entity', pathLayer, finder);
 
     this.currentState = ArcherStates.IDLE_RIGHT;
   }
