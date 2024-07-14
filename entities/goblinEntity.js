@@ -15,7 +15,7 @@ import { GoblinStates } from './states.js';
 export default class Goblin extends Entity {
 
   constructor(scene, x, y, width, height, pathLayer, finder, grid) {
-    super(scene, x, y, width, height, 'goblin-entity', pathLayer, finder);
+    super(scene, x, y, width, height, 'goblin-entity', pathLayer, finder, grid);
 
     this.grid = grid;
 
@@ -25,33 +25,11 @@ export default class Goblin extends Entity {
   }
 
   handleAttackOverlapWith(otherEntity) {
-    this.scene.physics.add.overlap(this.attackRange, otherEntity, (entity1, entity2) => {this.onAttackOverlap(entity1, entity2)}, 
-      null, this.scene);
+    // this.scene.physics.add.overlap(this.attackRange, otherEntity, (entity1, entity2) => {this.onAttackOverlap(entity1, entity2)}, 
+      // null, this.scene);
   }
 
   onAttackOverlap(entity1, entity2) {
-    // Logic to handle overlap between entity1 and entity2
-    // 1 - structure
-    // 2 - player sprite
-
-    // go to that player and attack
-
-    console.log(this.hasStart, this.hasReached);
-
-    if (this.hasReached) {
-      if (this.currentState = "IDLE_LEFT")
-        this.transitionStateTo("ATTACK_LEFT");
-      if (this.currentState = "IDLE_RIGHT")
-        this.transitionStateTo("ATTACK_RIGHT");
-    }
-
-    if (!this.isSetOn) {
-      var entity2Pos = entity2.getPosTile();
-      console.log(entity2Pos);
-      this.moveToTile(entity2Pos[0]-1, entity2Pos[1]-1, this.grid)
-    }
-
-    this.isSetOn = true;
   }
 
   update() {

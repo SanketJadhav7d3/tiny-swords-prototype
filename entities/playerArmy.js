@@ -27,22 +27,22 @@ export default class PlayerArmy {
 
     // this.warriors.add(new Warrior(scene, 21 * 64, 9 * 64, 45, 60, 'warrior-entity', this.pathLayer, this.finder));
     // this.warriors.add(new Warrior(scene, 23 * 64, 9 * 64, 45, 60, 'warrior-entity', this.pathLayer, this.finder));
-    this.warriors.add(new Warrior(scene, 23 * 64, 9 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
+    this.warriors.add(new Warrior(scene, 29 * 64, 14 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
 
-    this.workers.add(new Worker(scene, 19 * 64, 9 * 64, 45, 60, this.pathLayer, this.finder));
-    this.workers.add(new Worker(scene, 20 * 64, 9 * 64, 45, 60, this.pathLayer, this.finder));
+    // this.workers.add(new Worker(scene, 19 * 64, 9 * 64, 45, 60, this.pathLayer, this.finder));
+    // this.workers.add(new Worker(scene, 20 * 64, 9 * 64, 45, 60, this.pathLayer, this.finder));
 
-    this.archers.add(new Archer(scene, 19 * 64, 21 * 64, 45, 60, this.pathLayer, this.finder));
-    this.archers.add(new Archer(scene, 20 * 64, 21 * 64, 45, 60, this.pathLayer, this.finder));
+    // this.archers.add(new Archer(scene, 19 * 64, 21 * 64, 45, 60, this.pathLayer, this.finder));
+    // this.archers.add(new Archer(scene, 20 * 64, 21 * 64, 45, 60, this.pathLayer, this.finder));
     
     // this.p2.moveToTile(26, 21, this.grid);
     // this.p1.moveToTile(22, 22, this.grid);
-
   } 
 
   update() {
     // this.p1.update();
     // this.p2.update();
+
     this.warriors.children.iterate((child) => {
       child.update();
     });

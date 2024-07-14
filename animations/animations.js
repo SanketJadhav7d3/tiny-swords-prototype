@@ -80,14 +80,14 @@ export function createAnimations(scene) {
 
   scene.anims.create({
     key: 'warrior-downward-slash-right-anim',
-    frames: scene.anims.generateFrameNumbers('warrior-entity', { start: 12, end: 17 }), 
+    frames: scene.anims.generateFrameNumbers('warrior-entity', { start: 12, end: 23 }), 
     frameRate: 10,
     repeat: -1
   });
 
   scene.anims.create({
     key: 'warrior-upward-slash-right-anim',
-    frames: scene.anims.generateFrameNumbers('warrior-entity', { start: 18, end: 23 }), 
+    frames: scene.anims.generateFrameNumbers('warrior-entity', { start: 12, end: 23 }), 
     frameRate: 10,
     repeat: -1
   });
