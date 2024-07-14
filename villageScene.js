@@ -189,6 +189,19 @@ export default class VillageScene extends Phaser.Scene {
     playerArmy = new PlayerArmy(this, pathLayer, finder, grid);
     enemyArmy = new EnemyArmy(this, pathLayer, finder, grid);
 
+    // overlaps
+    playerArmy.warriors.children.iterate((warrior) => {
+      enemyArmy.goblins.children.iterate((goblin) => {
+        warrior.handleAttackOverlapWith(goblin);
+      });
+    });
+
+    enemyArmy.goblins.children.iterate((goblin) => {
+      playerArmy.warriors.children.iterate((warrior) => {
+        goblin.handleAttackOverlapWith(warrior);
+      });
+    });
+
     waterObstructionLayer.setCollisionByExclusion([-1]);
     // this.physics.add.collider(waterObstructionLayer, player);
     

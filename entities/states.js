@@ -62,8 +62,10 @@ export class BomberStates extends EntityStates {
 }
 
 export class StructureStates {
+
   static ATTACKED = "ATTACKED";
   static BUILT = "BUILT";
   static DESTROYED = "DESTROYED";
   static CONSTRUCT = "CONSTRUCT";
+
 }

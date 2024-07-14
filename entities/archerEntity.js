@@ -9,6 +9,7 @@ export default class Archer extends Entity {
     super(scene, x, y, width, height, 'archer-entity', pathLayer, finder);
 
     this.currentState = ArcherStates.IDLE_RIGHT;
+    this.health = 40;
   }
 
   update() {

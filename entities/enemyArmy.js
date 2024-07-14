@@ -19,20 +19,11 @@ export default class EnemyArmy {
     this.bombers.add(new Bomber(scene, 13 * 64, 16 * 64, 45, 60, this.pathLayer, this.finder));
     this.bombers.add(new Bomber(scene, 13 * 64, 17 * 64, 45, 60, this.pathLayer, this.finder));
 
-    this.goblins.add(new Goblin(scene, 30 * 64, 15 * 64, 45, 60, this.pathLayer, this.finder));
-    this.goblins.add(new Goblin(scene, 30 * 64, 10 * 64, 45, 60, this.pathLayer, this.finder));
+    this.goblins.add(new Goblin(scene, 24 * 64, 8 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
+    this.goblins.add(new Goblin(scene, 30 * 64, 10 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
 
     // this.p2.moveToTile(26, 21, this.grid);
     // this.p1.moveToTile(22, 22, this.grid);
-
-    this.bombers.children.iterate((child) => {
-      child.moveToTile(30, 15, this.grid);
-    });
-
-    this.goblins.children.iterate((child) => {
-      child.moveToTile(13, 15, this.grid);
-    });
-
   } 
 
   update() {

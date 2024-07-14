@@ -9,7 +9,7 @@ export default class Worker extends Entity {
     super(scene, x, y, width, height, 'worker-entity', pathLayer, finder);
 
     this.currentState = WorkerStates.IDLE_LEFT;
-
+    this.health = 30;
   }
 
   update() {

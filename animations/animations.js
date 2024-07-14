@@ -26,7 +26,8 @@ export function loadEntitySpriteSheet(scene) {
   scene.load.spritesheet("dead-entity", "./Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Troops/Dead/Dead.png", 
     { frameWidth: 64*2, frameHeight: 64*2 });
 
-
+  scene.load.spritesheet("fire", "./Tiny Swords/Tiny Swords (Update 010)/Effects/Fire/Fire.png", 
+    { frameWidth: 64*2, frameHeight: 64*2 });
 }
 
 export function createAnimations(scene) {
@@ -279,5 +280,12 @@ export function createAnimations(scene) {
     frames: scene.anims.generateFrameNumbers('dead-entity', { start: 0, end: 13 }), 
     frameRate: 10,
     repeat: 0 
+  });
+
+  scene.anims.create({
+    key: 'fire-anim',
+    frames: scene.anims.generateFrameNumbers('fire', { start: 0, end: 6 }), 
+    frameRate: 10,
+    repeat: -1 
   });
 }

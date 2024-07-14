@@ -12,6 +12,7 @@ export default class Structure extends Entity {
     scene.physics.add.existing(this.fullBodyBox);
     this.depth = 1;
     this.visualOffset = 30;
+    // this.attackRange.setVisible(false);
   }
 
   handleOverlapWith(otherEntity) {
@@ -46,7 +47,33 @@ export class Tree extends Structure {
 export class Castle extends Structure {
   constructor(scene, x, y, width, height, texture) {
     super(scene, x, y, width, height, texture);
-    this.currentState = StructureStates.DESTROYED;
+
+    this.currentState = StructureStates.BUILT;
+
+    this.health = 400;
+
+    this.firePlace1 = this.scene.physics.add.sprite(x, y-85, 'fire');
+    this.firePlace1.setDepth(2);
+    this.firePlace1.setVisible(false);
+    // this.firePlace1.play('fire-anim');
+
+    this.firePlace2 = this.scene.physics.add.sprite(x-90, y-50, 'fire');
+    this.firePlace2.setScale(0.8);
+    this.firePlace2.setDepth(2);
+    this.firePlace2.setVisible(false);
+    // this.firePlace2.play('fire-anim');
+
+    this.firePlace3 = this.scene.physics.add.sprite(x, y+80, 'fire');
+    this.firePlace3.setScale(0.5);
+    this.firePlace3.setDepth(2);
+    this.firePlace3.setVisible(false);
+    // this.firePlace3.play('fire-anim');
+
+    this.firePlace4 = this.scene.physics.add.sprite(x+90, y, 'fire');
+    this.firePlace4.setScale(0.5);
+    this.firePlace4.setDepth(2);
+    this.firePlace4.setVisible(false);
+    // this.firePlace4.play('fire-anim');
   }
 
   update() {
@@ -63,7 +90,7 @@ export class Castle extends Structure {
 export class House extends Structure {
   constructor(scene, x, y, width, height, texture) {
     super(scene, x, y, width, height, texture);
-    this.currentState = StructureStates.DESTROYED;
+    this.currentState = StructureStates.BUILT;
   }
 
   update() {
@@ -82,9 +109,23 @@ export class Tower extends Structure {
     super(scene, x, y, width, height, texture);
     this.currentState = StructureStates.BUILT;
     this.visualOffset = 80;
+
+    this.health = 100;
+
+    this.firePlace1 = this.scene.physics.add.sprite(x, y-85, 'fire');
+    this.firePlace1.setDepth(2);
+    this.firePlace1.setVisible(false);
+    //this.firePlace1.play('fire-anim');
+
+    this.firePlace2 = this.scene.physics.add.sprite(x, y+80, 'fire');
+    this.firePlace2.setScale(0.5);
+    this.firePlace2.setDepth(2);
+    this.firePlace2.setVisible(false);
+    // this.firePlace2.play('fire-anim');
   }
 
   update() {
+
     if (this.currentState == StructureStates.BUILT) {
       this.setTexture('tower-tiles');
     } else if (this.currentState == StructureStates.CONSTRUCT) {

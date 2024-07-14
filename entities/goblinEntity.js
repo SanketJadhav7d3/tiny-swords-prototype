@@ -13,55 +13,45 @@ import Entity from './playerEntity.js'
 import { GoblinStates } from './states.js';
 
 export default class Goblin extends Entity {
-  constructor(scene, x, y, width, height, pathLayer, finder) {
+
+  constructor(scene, x, y, width, height, pathLayer, finder, grid) {
     super(scene, x, y, width, height, 'goblin-entity', pathLayer, finder);
 
+    this.grid = grid;
+
     this.currentState = GoblinStates.IDLE_LEFT;
+    this.health = 40;
+    this.createAttackRange(200);
+  }
 
-    this.scene.input.keyboard.on('keydown-W', () => { 
-      this.setVelocityY(-300);
-      this.transitionStateTo(GoblinStates.RUN_RIGHT);
-    });
+  handleAttackOverlapWith(otherEntity) {
+    this.scene.physics.add.overlap(this.attackRange, otherEntity, (entity1, entity2) => {this.onAttackOverlap(entity1, entity2)}, 
+      null, this.scene);
+  }
 
-    this.scene.input.keyboard.on('keydown-S', () => {
-      this.setVelocityY(300);
-      this.transitionStateTo(GoblinStates.RUN_RIGHT);
-    });
+  onAttackOverlap(entity1, entity2) {
+    // Logic to handle overlap between entity1 and entity2
+    // 1 - structure
+    // 2 - player sprite
 
-    this.scene.input.keyboard.on('keydown-A', () => { 
-      this.setVelocityX(-300);
-      this.transitionStateTo(GoblinStates.RUN_LEFT);
-    });
+    // go to that player and attack
 
-    this.scene.input.keyboard.on('keydown-D', () => { 
-      this.setVelocityX(300);
-      this.transitionStateTo(GoblinStates.RUN_RIGHT);
-    });
+    console.log(this.hasStart, this.hasReached);
 
-    this.scene.input.keyboard.on('keyup-W', () => { 
-      this.setVelocityY(0);
-      this.transitionStateTo(GoblinStates.IDLE_LEFT);
-    });
+    if (this.hasReached) {
+      if (this.currentState = "IDLE_LEFT")
+        this.transitionStateTo("ATTACK_LEFT");
+      if (this.currentState = "IDLE_RIGHT")
+        this.transitionStateTo("ATTACK_RIGHT");
+    }
 
-    this.scene.input.keyboard.on('keyup-S', () => {
-      this.setVelocityY(0);
-      this.transitionStateTo(GoblinStates.IDLE_LEFT);
-    });
+    if (!this.isSetOn) {
+      var entity2Pos = entity2.getPosTile();
+      console.log(entity2Pos);
+      this.moveToTile(entity2Pos[0]-1, entity2Pos[1]-1, this.grid)
+    }
 
-    this.scene.input.keyboard.on('keyup-A', () => { 
-      this.setVelocityX(0);
-      this.transitionStateTo(GoblinStates.IDLE_LEFT);
-    });
-
-    this.scene.input.keyboard.on('keyup-D', () => { 
-      this.setVelocityX(0);
-      this.transitionStateTo(GoblinStates.IDLE_RIGHT);
-    });
-
-    this.scene.input.keyboard.on('keydown-F', () => { 
-      this.setVelocityX(0);
-      this.transitionStateTo(GoblinStates.ATTACK_RIGHT);
-    });
+    this.isSetOn = true;
   }
 
   update() {

@@ -18,6 +18,8 @@ export default class Bomber extends Entity {
     super(scene, x, y, width, height, 'bomber-entity', pathLayer, finder);
 
     this.currentState = BomberStates.IDLE_RIGHT;
+    this.health = 40;
+
   }
 
   update() {
