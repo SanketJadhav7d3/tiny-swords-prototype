@@ -16,22 +16,26 @@ export default class Warrior extends Entity {
     this.health = 50;
     this.gettingAttacked = false;
 
-    this.createAttackRange(500);
-    this.attackRange.setDepth(4);
 
     this.isSetOn = false;
   }
 
   handleAttackOverlapWith(otherEntity) {
-    //this.scene.physics.add.overlap(this.attackRange, otherEntity, (entity1, entity2) => {this.onAttackOverlap(entity1, entity2)}, 
-      //null, this.scene);
+    this.scene.physics.add.overlap(this.attackRange, otherEntity, (entity1, entity2) => {this.onAttackOverlap(entity1, entity2)}, 
+      null, this.scene);
   }
 
   onAttackOverlap(entity1, entity2) {
+    console.log("attack");
+  }
+
+  protectEntity(entity) {
+    // go to the entity
+    var entityPos = entity.getPosTile();
+    this.moveToTile(entityPos[0], entityPos[1] - 1, this.grid);
   }
 
   update() {
-
 
     if (this.currentState == "RUN_RIGHT") {
       // this.flipX = false;

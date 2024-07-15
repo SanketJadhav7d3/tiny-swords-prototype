@@ -12,11 +12,12 @@ export default class Structure extends Entity {
     scene.physics.add.existing(this.fullBodyBox);
     this.depth = 1;
     this.visualOffset = 30;
+    this.hasOverlapped = false;
     // this.attackRange.setVisible(false);
   }
 
   handleOverlapWith(otherEntity) {
-    this.scene.physics.add.overlap(this.fullBodyBox, otherEntity, this.onOverlap, null, this.scene);
+    this.scene.physics.add.overlap(this.fullBodyBox, otherEntity, (entity1, entity2) => {this.onOverlap(entity1, entity2)}, null, this.scene);
   }
 
   onOverlap(entity1, entity2) {
@@ -24,8 +25,8 @@ export default class Structure extends Entity {
     // 1 - structure
     // 2 - player sprite
     
-    // var structureBottomY = entity1.y + (entity1.height / 2);
 
+    this.hasOverlapped = true;
     if (entity2.y < entity1.y + 50) {
       entity2.depth = 0;
     }
@@ -33,6 +34,7 @@ export default class Structure extends Entity {
       entity2.depth = 2;
     }
   }
+
 }
 
 export class Tree extends Structure {
@@ -105,12 +107,16 @@ export class House extends Structure {
 }
 
 export class Tower extends Structure {
-  constructor(scene, x, y, width, height, texture) {
-    super(scene, x, y, width, height, texture);
+  constructor(scene, x, y, width, height) {
+    super(scene, x, y, width, height, 'tower-tiles');
     this.currentState = StructureStates.BUILT;
     this.visualOffset = 80;
 
     this.health = 100;
+
+
+    // array of warriors protecting the tower
+    this.warriorsProtecting = [];
 
     this.firePlace1 = this.scene.physics.add.sprite(x, y-85, 'fire');
     this.firePlace1.setDepth(2);
@@ -124,7 +130,15 @@ export class Tower extends Structure {
     // this.firePlace2.play('fire-anim');
   }
 
-  update() {
+  update(movingEntities) {
+
+    this.setAlpha(1);
+
+    movingEntities.children.iterate((child) => {
+      if (this.scene.physics.overlap(this.fullBodyBox, child)) {
+        this.setAlpha(0.5);
+      } 
+    });
 
     if (this.currentState == StructureStates.BUILT) {
       this.setTexture('tower-tiles');
@@ -133,5 +147,42 @@ export class Tower extends Structure {
     } else if  (this.currentState == StructureStates.DESTROYED) {
       this.setTexture('tower-destroyed-tiles');
     }
+  }
+}
+
+export class Towers {
+  constructor(scene, towerPoints) {
+    this.towerPoints = towerPoints;
+    this.scene = scene;
+    this.towersGroup = this.scene.physics.add.staticGroup();
+
+    this.towerPoints.forEach(object => {
+
+      let obj = new Tower(this.scene, object.x, object.y, 100, 100);
+
+      // game logic 
+      // playerArmy.warriors.children.iterate((child) => {
+        // this.physics.add.collider(child, obj);
+        // obj.handleOverlapWith(child);
+      // });
+
+      this.towersGroup.add(obj);
+    });
+  }
+
+  handleOverlapWithGroup(otherGroup) {
+    this.towersGroup.children.iterate((tower) => {
+      otherGroup.children.iterate((child) => {
+        tower.handleOverlapWith(child);
+      });
+    });
+  }
+
+  update(movingEntities) {
+
+    this.towersGroup.children.iterate((child) => {
+      child.update(movingEntities);
+    });
+
   }
 }

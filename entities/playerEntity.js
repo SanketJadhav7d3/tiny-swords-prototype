@@ -74,8 +74,11 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
   }
 
   moveToTile(tileX, tileY, grid) {
-    var playerTileX = this.pathLayer.worldToTileX(this.x);
-    var playerTileY = this.pathLayer.worldToTileX(this.y);
+    // var playerTileX = this.pathLayer.worldToTileX(this.x);
+    // var playerTileY = this.pathLayer.worldToTileX(this.y);
+
+    var playerTileX = Math.floor(this.x / 64)
+    var playerTileY = Math.floor(this.y / 64)
 
     var gridClone = grid.clone();
 
@@ -88,8 +91,11 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
   }
 
   getPosTile() {
-    var playerTileX = this.pathLayer.worldToTileX(this.x);
-    var playerTileY = this.pathLayer.worldToTileX(this.y);
+    // var playerTileX = this.pathLayer.worldToTileX(this.x);
+    // var playerTileY = this.pathLayer.worldToTileX(this.y);
+    var playerTileX = Math.floor(this.x / 64)
+    var playerTileY = Math.floor(this.y / 64)
+
 
     return [playerTileX, playerTileY];
   }
@@ -141,7 +147,7 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
   follow() {
     // if other entity is moving then update path to that entity
     // else existing path
-    //
+  
     if (this.toFollow == null) return;
     if (!this.isFollowing) {
       // clear the tween

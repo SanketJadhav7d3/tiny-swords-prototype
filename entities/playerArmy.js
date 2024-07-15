@@ -13,7 +13,6 @@ import Archer from './archerEntity.js';
 
 
 export default class PlayerArmy {
-
   constructor(scene, pathLayer, finder, grid) {
     this.scene = scene;
     this.pathLayer = pathLayer;
@@ -21,23 +20,20 @@ export default class PlayerArmy {
     this.grid = grid;
 
     this.warriors = scene.physics.add.group();
-    this.workers = scene.physics.add.group();
-    this.archers = scene.physics.add.group();
-    this.towers = scene.physics.add.group();
-
-    // this.warriors.add(new Warrior(scene, 21 * 64, 9 * 64, 45, 60, 'warrior-entity', this.pathLayer, this.finder));
-    // this.warriors.add(new Warrior(scene, 23 * 64, 9 * 64, 45, 60, 'warrior-entity', this.pathLayer, this.finder));
-    this.warriors.add(new Warrior(scene, 29 * 64, 14 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
-
-    // this.workers.add(new Worker(scene, 19 * 64, 9 * 64, 45, 60, this.pathLayer, this.finder));
-    // this.workers.add(new Worker(scene, 20 * 64, 9 * 64, 45, 60, this.pathLayer, this.finder));
-
-    // this.archers.add(new Archer(scene, 19 * 64, 21 * 64, 45, 60, this.pathLayer, this.finder));
-    // this.archers.add(new Archer(scene, 20 * 64, 21 * 64, 45, 60, this.pathLayer, this.finder));
-    
-    // this.p2.moveToTile(26, 21, this.grid);
-    // this.p1.moveToTile(22, 22, this.grid);
   } 
+
+  spawnWarrior() {
+    var warrior = new Warrior(this.scene, 29 * 64, 14 * 64, 45, 60, this.pathLayer, this.finder, this.grid);
+
+    this.warriors.add(warrior);
+  }
+
+  protectTower(index, tower) {
+    // go to that tower and protect it 
+    // warrior.moveToTile(towerPos[0], towerPos[1]);
+    var warrior = this.warriors.getChildren()[index]
+    warrior.protectEntity(tower);
+  }
 
   update() {
     // this.p1.update();
@@ -47,12 +43,12 @@ export default class PlayerArmy {
       child.update();
     });
 
-    this.workers.children.iterate((child) => {
-      child.update();
-    });
+    // this.workers.children.iterate((child) => {
+      // child.update();
+    // });
 
-    this.archers.children.iterate((child) => {
-      child.update();
-    });
+    // this.archers.children.iterate((child) => {
+      // child.update();
+    // });
   }
 }

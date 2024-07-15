@@ -18,13 +18,13 @@ import Warrior from './entities/warriorEntity.js';
 import Bomber from './entities/bomberEntity.js';
 import Archer from './entities/archerEntity.js';
 import Goblin from './entities/goblinEntity.js';
+import GameLogic from './gameLogic.js';
 import Worker from './entities/workerEntity.js';
 import PlayerArmy from './entities/playerArmy.js';
 import EnemyArmy from './entities/enemyArmy.js';
-import Structure, { Tree, Tower, Castle, House } from './entities/structureEntity.js';
+import Structure, { Tree, Tower, Castle, House, Towers } from './entities/structureEntity.js';
 import { loadEntitySpriteSheet, createAnimations } from './animations/animations.js';
 
-// let controls;
 let cameraSpeed = 10;
 var player;
 var trees;
@@ -34,6 +34,7 @@ var obstructions;
 var houses;
 var towers;
 var playerArmy;
+var gameLogic;
 var enemyArmy;
 
 export default class VillageScene extends Phaser.Scene {
@@ -189,22 +190,22 @@ export default class VillageScene extends Phaser.Scene {
     playerArmy = new PlayerArmy(this, pathLayer, finder, grid);
     enemyArmy = new EnemyArmy(this, pathLayer, finder, grid);
 
+
+    // // game logic
     // overlaps
-    playerArmy.warriors.children.iterate((warrior) => {
-      enemyArmy.goblins.children.iterate((goblin) => {
-        warrior.handleAttackOverlapWith(goblin);
-      });
-    });
+    // playerArmy.warriors.children.iterate((warrior) => {
+      // enemyArmy.goblins.children.iterate((goblin) => {
+        // warrior.handleAttackOverlapWith(goblin);
+      // });
+    // });
 
-    enemyArmy.goblins.children.iterate((goblin) => {
-      playerArmy.warriors.children.iterate((warrior) => {
-        goblin.handleAttackOverlapWith(warrior);
-      });
-    });
+    // game logic
+    // enemyArmy.goblins.children.iterate((goblin) => {
+      // playerArmy.warriors.children.iterate((warrior) => {
+        // goblin.handleAttackOverlapWith(warrior);
+      // });
+    // });
 
-    waterObstructionLayer.setCollisionByExclusion([-1]);
-    // this.physics.add.collider(waterObstructionLayer, player);
-    
     // layer and player overlap
     const castlePoint = map.findObject("castle", obj => obj.name == "castle-point");
 
@@ -214,6 +215,13 @@ export default class VillageScene extends Phaser.Scene {
     // this.physics.add.collider(castle, player);
     // castle.handleOverlapWith(player);
 
+    // towers
+    const towersPoints = map.getObjectLayer("towers")['objects'];
+    towers = new Towers(this, towersPoints);
+
+    // game logic
+    gameLogic = new GameLogic(this, castle, towers, playerArmy, enemyArmy);
+    
     // water rocks
     this.rocks02 = this.physics.add.group();
     const waterRockPoints02 = map.getObjectLayer("water-rocks-02")['objects'];
@@ -272,23 +280,6 @@ export default class VillageScene extends Phaser.Scene {
       // obj.setOrigin(0, 0);
       // obj.setSize(object.width, object.height);
       // obj.setVisible(false);
-    });
-
-    // towers
-    towers = this.physics.add.staticGroup();
-
-    const towersPoints = map.getObjectLayer("towers")['objects'];
-
-    towersPoints.forEach(object => {
-
-      let obj = new Tower(this, object.x, object.y, 100, 100, 'tower-tiles');
-
-      playerArmy.warriors.children.iterate((child) => {
-        this.physics.add.collider(child, obj);
-        obj.handleOverlapWith(child);
-      });
-
-      towers.add(obj);
     });
 
     // trees
@@ -359,17 +350,7 @@ export default class VillageScene extends Phaser.Scene {
   update(time, delta) {
     this.controls.update(delta);
     
-    // player.update();
-    playerArmy.update();
-
-    enemyArmy.update();
-
-    castle.update();
-
-    towers.children.iterate((child) => {
-      child.update();
-    });
-
+    gameLogic.update();
 
     houses.children.iterate((child) => {
       child.update();
