@@ -17,7 +17,8 @@ export default class Structure extends Entity {
   }
 
   handleOverlapWith(otherEntity) {
-    this.scene.physics.add.overlap(this.fullBodyBox, otherEntity, (entity1, entity2) => {this.onOverlap(entity1, entity2)}, null, this.scene);
+    this.scene.physics.add.overlap(this.fullBodyBox, otherEntity, (entity1, entity2) => {this.onOverlap(entity1, entity2)}, 
+      null, this.scene);
   }
 
   onOverlap(entity1, entity2) {
@@ -85,12 +86,11 @@ export class Castle extends Structure {
       if (this.scene.physics.overlap(this.fullBodyBox, child)) {
         if (child.y < this.y + 50) {
           child.depth = 0;
+          this.setAlpha(0.5);
         }
         else {
           child.depth = 2;
         }
-
-        this.setAlpha(0.5);
       } 
     });
 
@@ -192,11 +192,9 @@ export class Towers {
     });
   }
 
-  update(movingEntities) {
-
+  update(warriorEntities, goblinEntities) {
     this.towersGroup.children.iterate((child) => {
-      child.update(movingEntities);
+      child.update(warriorEntities);
     });
-
   }
 }

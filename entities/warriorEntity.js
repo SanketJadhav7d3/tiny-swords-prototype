@@ -11,12 +11,9 @@ import { WarriorStates } from './states.js';
 export default class Warrior extends Entity {
   constructor(scene, x, y, width, height, pathLayer, finder, grid) {
     super(scene, x, y, width, height, 'warrior-entity', pathLayer, finder, grid);
-
     this.currentState = WarriorStates.IDLE_RIGHT;
     this.health = 50;
     this.gettingAttacked = false;
-
-
     this.isSetOn = false;
   }
 
@@ -37,71 +34,70 @@ export default class Warrior extends Entity {
 
   update() {
 
-    if (this.currentState == "RUN_RIGHT") {
-      // this.flipX = false;
-      this.setFlipX(false);
-      this.play('warrior-run-anim', true);
-    }
+    switch (this.currentState) {
 
-    if (this.currentState == "RUN_LEFT") {
-      // this.flipX = true;
-      this.setFlipX(true);
-      this.play('warrior-run-anim', true);
-    }
+      case 'RUN_RIGHT':
+        this.setFlipX(false);
+        this.play('warrior-run-anim', true);
+        break;
 
-    if (this.currentState == "IDLE_LEFT") {
-      this.setFlipX(true);
-      this.play('warrior-idle-anim', true);
-    }
+      case 'RUN_RIGHT':
+        this.setFlipX(true);
+        this.play('warrior-run-anim', true);
+        break;
 
-    if (this.currentState == "IDLE_RIGHT") {
-      this.setFlipX(false);
-      this.play('warrior-idle-anim', true);
-    }
+      case 'IDLE_LEFT':
+        this.setFlipX(true);
+        this.play('warrior-idle-anim', true);
+        break;
 
-    if (this.currentState == "UPWARD_SLASH_LEFT") {
-      this.setFlipX(true);
-      this.play('warrior-upward-slash-right-anim', true);
-    }
+      case 'IDLE_RIGHT':
+        this.setFlipX(false);
+        this.play('warrior-idle-anim', true);
+        break;
 
-    if (this.currentState == "UPWARD_SLASH_RIGHT") {
-      this.setFlipX(false);
-      this.play('warrior-upward-slash-right-anim', true);
-    }
+      case 'UPWARD_SLASH_LEFT':
+        this.setFlipX(true);
+        this.play('warrior-upward-slash-right-anim', true);
+        break;
 
-    if (this.currentState == "DOWNWARD_SLASH_RIGHT") {
-      this.setFlipX(false);
-      this.play('warrior-downward-slash-right-anim', true);
-    }
+      case 'UPWARD_SLASH_RIGHT':
+        this.setFlipX(false);
+        this.play('warrior-upward-slash-right-anim', true);
+        break;
 
-    if (this.currentState == "DOWNWARD_SLASH_LEFT") {
-      this.setFlipX(true);
-      this.play('warrior-downward-slash-right-anim', true);
-    }
+      case 'DOWNWARD_SLASH_RIGHT':
+        this.setFlipX(false);
+        this.play('warrior-downward-slash-right-anim', true);
+        break;
 
-    if (this.currentState == "UPWARD_SLASH_FRONT") {
-      this.setFlipX(false);
-      this.play('warrior-upward-slash-front-anim', true);
-    }
+      case 'DOWNWARD_SLASH_LEFT':
+        this.setFlipX(true);
+        this.play('warrior-downward-slash-right-anim', true);
+        break;
 
-    if (this.currentState == "DOWNWARD_SLASH_FRONT") {
-      this.setFlipX(false);
-      this.play('warrior-downward-slash-front-anim', true);
-    }
+      case 'UPWARD_SLASH_FRONT':
+        this.setFlipX(false);
+        this.play('warrior-upward-slash-front-anim', true);
+        break;
 
-    if (this.currentState == "UPWARD_SLASH_BACK") {
-      this.setFlipX(false);
-      this.play('warrior-upward-slash-back-anim', true);
-    }
+      case 'DOWNWARD_SLASH_FRONT':
+        this.setFlipX(false);
+        this.play('warrior-downward-slash-front-anim', true);
+        break;
 
-    if (this.currentState == "DOWNWARD_SLASH_BACK") {
-      this.setFlipX(false);
-      this.play('warrior-downward-slash-back-anim', true);
-    }
-
-    if (this.currentState == "DEAD") {
-      this.setFlipX(false);
-      this.play('dead-anim', true);
+      case 'UPWARD_SLASH_BACK':
+        this.setFlipX(false);
+        this.play('warrior-upward-slash-back-anim', true);
+        break;
+      case 'DOWNWARD_SLASH_BACK':
+        this.setFlipX(false);
+        this.play('warrior-downward-slash-back-anim', true);
+        break;
+      case 'DEAD':
+        this.setFlipX(false);
+        this.play('dead-anim', true);
+        break;
     }
   }
 }

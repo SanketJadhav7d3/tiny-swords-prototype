@@ -15,16 +15,14 @@ export default class GameLogic {
 
     var towersArray = this.towers.towersGroup.getChildren();
 
-    for (var i = 0; i < towersArray.length; i++) {
-      var tower = towersArray[i];
-      this.playerArmy.spawnWarrior();
-      this.playerArmy.protectTower(i, tower);
-    }
+    this.playerArmy.spawnWarrior();
 
     this.playerArmy.spawnWarrior();
-    this.playerArmy.protectTower(i, castle);
 
     this.towers.handleOverlapWithGroup(this.playerArmy.warriors);
+    this.towers.handleOverlapWithGroup(this.enemyArmy.goblins);
+
+    this.enemyArmy.handleGoblinAttackOverlapWithGroup(this.playerArmy.warriors);
   }
 
   update() {
@@ -36,6 +34,6 @@ export default class GameLogic {
     this.castle.update(this.playerArmy.warriors);
 
     // towers update
-    this.towers.update(this.playerArmy.warriors);
+    this.towers.update(this.playerArmy.warriors, this.enemyArmy.goblins);
   }
 }

@@ -22,20 +22,25 @@ export default class EnemyArmy {
     this.goblins.add(new Goblin(scene, 30 * 64, 13 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
     // this.goblins.add(new Goblin(scene, 30 * 64, 10 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
 
-    this.goblins.children.iterate((child) => {
-      child.moveToTile(15, 12, this.grid);
-    });
+    // this.goblins.children.iterate((goblin) => {
+       // goblin.moveToTile(15, 15, this.grid);
+    // });
 
     // this.p2.moveToTile(26, 21, this.grid);
     // this.p1.moveToTile(22, 22, this.grid);
   } 
 
+  handleGoblinAttackOverlapWithGroup(otherGroup) {
+    this.goblins.children.iterate((goblin) => {
+      otherGroup.children.iterate((child) => {
+        goblin.handleAttackOverlapWith(child);
+      });
+    });
+  }
+
   update() {
     // this.p1.update();
     // this.p2.update();
-    this.bombers.children.iterate((child) => {
-      child.update();
-    });
 
     this.goblins.children.iterate((child) => {
       child.update();

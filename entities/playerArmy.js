@@ -22,7 +22,7 @@ export default class PlayerArmy {
   } 
 
   spawnWarrior() {
-    var warrior = new Warrior(this.scene, 29 * 64, 14 * 64, 45, 60, this.pathLayer, this.finder, this.grid);
+    var warrior = new Warrior(this.scene, 30 * 64, 16 * 64, 45, 60, this.pathLayer, this.finder, this.grid);
 
     this.warriors.add(warrior);
   }
