@@ -149,6 +149,7 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
     // else existing path
   
     if (this.toFollow == null) return;
+
     if (!this.isFollowing) {
       // clear the tween
       var otherEntityPos = this.toFollow.getPosTile();

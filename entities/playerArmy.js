@@ -11,7 +11,6 @@ import Archer from './archerEntity.js';
 
 // let index = 0;
 
-
 export default class PlayerArmy {
   constructor(scene, pathLayer, finder, grid) {
     this.scene = scene;
@@ -34,6 +33,7 @@ export default class PlayerArmy {
     var warrior = this.warriors.getChildren()[index]
     warrior.protectEntity(tower);
   }
+
 
   update() {
     // this.p1.update();

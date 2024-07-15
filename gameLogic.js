@@ -24,9 +24,7 @@ export default class GameLogic {
     this.playerArmy.spawnWarrior();
     this.playerArmy.protectTower(i, castle);
 
-
     this.towers.handleOverlapWithGroup(this.playerArmy.warriors);
-
   }
 
   update() {
@@ -40,5 +38,4 @@ export default class GameLogic {
     // towers update
     this.towers.update(this.playerArmy.warriors);
   }
-
 }
