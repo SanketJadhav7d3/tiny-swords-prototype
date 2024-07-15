@@ -78,7 +78,22 @@ export class Castle extends Structure {
     // this.firePlace4.play('fire-anim');
   }
 
-  update() {
+  update(movingEntities) {
+    this.setAlpha(1);
+
+    movingEntities.children.iterate((child) => {
+      if (this.scene.physics.overlap(this.fullBodyBox, child)) {
+        if (child.y < this.y + 50) {
+          child.depth = 0;
+        }
+        else {
+          child.depth = 2;
+        }
+
+        this.setAlpha(0.5);
+      } 
+    });
+
     if (this.currentState == StructureStates.BUILT) {
       this.setTexture('castle-tiles');
     } else if (this.currentState == StructureStates.CONSTRUCT) {
@@ -113,7 +128,6 @@ export class Tower extends Structure {
     this.visualOffset = 80;
 
     this.health = 100;
-
 
     // array of warriors protecting the tower
     this.warriorsProtecting = [];
