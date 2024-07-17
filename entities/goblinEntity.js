@@ -47,7 +47,6 @@ export default class Goblin extends Entity {
   }
 
   onAttackOverlap(entity1, entity2) {
-
     if (entity2.texture.key == "warrior-entity" && !this.context.isWarriorInRange) {
       this.context.isWarriorInRange = true;
       this.context.warrior = entity2;
@@ -68,7 +67,10 @@ export default class Goblin extends Entity {
     let frameNumber = currentFrame.frame.name;
 
     this.attackFrames.forEach(attackFrame => {
-      if (frameNumber == attackFrame) this.context.warrior.health -= 2;
+      if (frameNumber == attackFrame) {
+        if (this.context.warrior)
+          this.context.warrior.sustainDamage();
+      }
     });
 
     this.stopMoving();
@@ -94,9 +96,12 @@ export default class Goblin extends Entity {
     return this.scene.physics.world.overlap(this.range, enemy);
   }
 
+  // by value
   updateContext(enemy) {
 
     if (this.context.warrior != null) {
+      // check for health of the enemy
+
       // is contextual warrior in attack range
       if (!this.isInAttackRange(this.context.warrior)) {
         // is not in attack range
@@ -116,6 +121,7 @@ export default class Goblin extends Entity {
         this.context.isWarriorInAttackRange = true;
         this.context.isWarriorInRange = true;
         // this.context.warrior = enemy;
+
       }
     } else {
       // make the enemy the contextual warrior
@@ -125,6 +131,10 @@ export default class Goblin extends Entity {
         if (this.isInAttackRange(enemy)) {
           this.context.isWarriorInAttackRange = true;
         }
+      } else {
+        this.context.isWarriorInAttackRange = false;
+        this.context.isWarriorInRange = false;
+        this.context.warrior = null;
       }
     } 
   }
@@ -141,6 +151,7 @@ export default class Goblin extends Entity {
   }
 
   update(playerArmy) {
+
     playerArmy.warriors.children.iterate((child) => {
       // if there is overlap between the goblin and the warrior
       // check if there is already any warrior in range
@@ -190,7 +201,6 @@ export default class Goblin extends Entity {
       case "ATTACK_BACK":
         this.play('goblin-attack-back-anim', true);
         break;
-
     }
   }
 }

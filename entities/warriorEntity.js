@@ -92,6 +92,15 @@ export default class Warrior extends Entity {
     }
   }
 
+  sustainDamage() {
+    this.health -= 2;
+    this.setTint(0xff0000); 
+    
+    setTimeout(() => {
+      this.clearTint(); 
+    }, 10);
+  }
+
   update(enemyArmy) {
 
     enemyArmy.goblins.children.iterate((child) => {
@@ -164,6 +173,13 @@ export default class Warrior extends Entity {
         this.setFlipX(false);
         this.play('dead-anim', true);
         break;
+    }
+
+    if (this.health <= 0) {
+      console.log("got killed");
+      this.attackRange.destroy();
+      this.range.destroy();
+      this.destroy();
     }
   }
 }
