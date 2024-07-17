@@ -13,17 +13,21 @@ export default class Warrior extends Entity {
     super(scene, x, y, width, height, 'warrior-entity', pathLayer, finder, grid);
     this.currentState = WarriorStates.IDLE_RIGHT;
     this.health = 50;
-    this.gettingAttacked = false;
     this.isSetOn = false;
+
+    this.context = {
+      isEnemyInRange: false,
+      enemy: null, 
+    }
   }
 
   handleAttackOverlapWith(otherEntity) {
-    this.scene.physics.add.overlap(this.attackRange, otherEntity, (entity1, entity2) => {this.onAttackOverlap(entity1, entity2)}, 
-      null, this.scene);
   }
 
   onAttackOverlap(entity1, entity2) {
-    console.log("attack");
+  }
+
+  decide() {
   }
 
   protectEntity(entity) {
@@ -32,7 +36,25 @@ export default class Warrior extends Entity {
     this.moveToTile(entityPos[0], entityPos[1] - 1, this.grid);
   }
 
+  attackEnemy() {
+    // go to the warrior
+    // attack it
+
+    if (this.hasReached) {
+      this.transitionStateTo("UPWARD_SLASH_LEFT");
+      return;
+    }
+
+    if (!this.isMoving()) {
+      var enemyPos = this.context.enemy.getPosTile();
+      this.moveToTile(enemyPos[0], enemyPos[1], this.grid);
+    }
+  }
+
   update() {
+
+    this.decide();
+
 
     switch (this.currentState) {
 

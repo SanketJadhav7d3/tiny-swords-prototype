@@ -89,6 +89,7 @@ export default class VillageScene extends Phaser.Scene {
   }
 
   create() {
+
     const map = this.make.tilemap({ key: "map"});
 
     // custom cursor

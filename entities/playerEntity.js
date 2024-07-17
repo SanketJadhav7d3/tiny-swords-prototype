@@ -20,7 +20,6 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
     scene.physics.add.existing(this);
 
     this.pathLayer = pathLayer;
-
     this.currentState = null;
 
     this.finder = finder;
@@ -28,6 +27,7 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
     this.body.setSize(width, height);
 
     this.grid = grid;
+    this.path = []
     
     // this.setOffset(offsetX, offsetY);
     // this.setCollideWorldBounds(true);
@@ -36,17 +36,29 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
     this.isFollowing = false;
 
     this.hasStarted = false;
-    this.hasReached = false;
 
     this.moveTween = null;
-    this.toFollow = null;
-    // this.createAttackRange(200);
   }
 
   createAttackRange(size) {
-    const graphics = this.scene.add.graphics();
+    let graphics = this.scene.add.graphics();
+    graphics.fillStyle(0xFF0000, 0.1); // White color
 
-    graphics.fillStyle(0xFF0000, 0.01); // White color
+    // Draw a square
+    graphics.fillRect(0, 0, size, size);
+
+    // Generate a texture from the graphics object
+    graphics.generateTexture('attackSquareTexture', size, size);
+
+    this.attackRange = this.scene.physics.add.sprite(this.x, this.y, 'attackSquareTexture');
+
+    graphics.destroy();
+  }
+
+  createRange(size) {
+    let graphics = this.scene.add.graphics();
+
+    graphics.fillStyle(0x808080, 0.1); // White color
 
     // Draw a square
     graphics.fillRect(0, 0, size, size);
@@ -54,17 +66,19 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
     // Generate a texture from the graphics object
     graphics.generateTexture('squareTexture', size, size);
 
-    this.attackRange = this.scene.physics.add.sprite(this.x, this.y, 'squareTexture');
+    this.range = this.scene.physics.add.sprite(this.x, this.y, 'squareTexture');
 
     graphics.destroy();
   }
+
 
   transitionStateTo(state) {
     this.currentState = state;
   }
 
   stopMoving() {
-    this.moveTween.stop();
+    if (this.moveTween)
+      this.moveTween.stop();
     this.moveTween = null;
   }
 
@@ -89,6 +103,7 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
 
     this.moveAlongPath(path, 0);
   }
+
 
   getPosTile() {
     // var playerTileX = this.pathLayer.worldToTileX(this.x);
@@ -126,7 +141,7 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
     const worldY = tile.getCenterY();
 
     // Play walking animation
-    if (worldX > this.x)
+    if (worldX >= this.x)
       this.transitionStateTo('RUN_RIGHT');
     else
       this.transitionStateTo('RUN_LEFT');
@@ -144,23 +159,58 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
     });
   }
 
-  follow() {
-    // if other entity is moving then update path to that entity
-    // else existing path
-  
-    if (this.toFollow == null) return;
+  followEntity(entity) {
+    // find path to the entity
 
-    if (!this.isFollowing) {
-      // clear the tween
-      var otherEntityPos = this.toFollow.getPosTile();
-      console.log(otherEntityPos);
-      this.moveToTile(otherEntityPos[0]-1, otherEntityPos[1], this.grid)
-      this.isFollowing = true;
+    // move the second tile 
+    
+    // recalculate the path
+
+    var entityPos = entity.getPosTile();
+    var thisPos = this.getPosTile();
+    var gridClone = this.grid.clone();
+    var path = this.finder.findPath(thisPos[0], thisPos[1], entityPos[0]+1, entityPos[1], gridClone);
+    var nextTileX;
+    var nextTileY;
+
+    // find index of next different location
+    var i = 0;
+
+    // go to the next position
+    if (path[1]) {
+      nextTileX = path[1][0];
+      nextTileY = path[1][1];
+    } else {
+      console.log("reached");
+      this.hasStarted = false;
+      this.hasReached = true;
+      return;
     }
 
-    if (this.toFollow.isMoving())
-      // clear the tween
-      var otherEntityPos = this.toFollow.getPosTile();
-      this.moveToTile(otherEntityPos[0]-1, otherEntityPos[1], this.grid)
+    //for (i = 0; i < path.length; ++i) {
+      //if (nextTileX != thisPos[0] || nextTileY != thisPos[1]) break;
+    //} 
+
+    const tile = this.pathLayer.getTileAt(nextTileX, nextTileY);
+
+    const worldX = tile.getCenterX();
+    const worldY = tile.getCenterY();
+    
+    // Play walking animation
+    if (worldX > this.x)
+      this.transitionStateTo('RUN_RIGHT');
+    else
+      this.transitionStateTo('RUN_LEFT');
+
+    this.moveTween = this.scene.tweens.add({
+      targets: [this, this.attackRange, this.range],
+      x: worldX,
+      y: worldY,
+      duration: 300,
+      onComplete: () => {
+        // Move to the next tile in the path
+        // this.stopMoving();
+      }
+    });
   }
 }

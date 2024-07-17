@@ -38,12 +38,12 @@ export default class EnemyArmy {
     });
   }
 
-  update() {
+  update(playerArmy) {
     // this.p1.update();
     // this.p2.update();
 
     this.goblins.children.iterate((child) => {
-      child.update();
+      child.update(playerArmy);
     });
   }
 }

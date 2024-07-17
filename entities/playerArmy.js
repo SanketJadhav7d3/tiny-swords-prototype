@@ -19,11 +19,13 @@ export default class PlayerArmy {
     this.grid = grid;
 
     this.warriors = scene.physics.add.group();
+    this.workers = scene.physics.add.group();
+    this.archers = scene.physics.add.group();
+
   } 
 
   spawnWarrior() {
-    var warrior = new Warrior(this.scene, 30 * 64, 16 * 64, 45, 60, this.pathLayer, this.finder, this.grid);
-
+    var warrior = new Warrior(this.scene, 29 * 64, 17 * 64, 45, 60, this.pathLayer, this.finder, this.grid);
     this.warriors.add(warrior);
   }
 
@@ -34,6 +36,13 @@ export default class PlayerArmy {
     warrior.protectEntity(tower);
   }
 
+  handleWarriorAttackOverlapWithGroup(otherGroup) {
+    this.warriors.children.iterate((warrior) => {
+      otherGroup.children.iterate((child) => {
+        warrior.handleAttackOverlapWith(child);
+      });
+    });
+  }
 
   update() {
     // this.p1.update();
