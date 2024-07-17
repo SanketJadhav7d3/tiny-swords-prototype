@@ -13,21 +13,63 @@ export default class Warrior extends Entity {
     super(scene, x, y, width, height, 'warrior-entity', pathLayer, finder, grid);
     this.currentState = WarriorStates.IDLE_RIGHT;
     this.health = 50;
-    this.isSetOn = false;
 
+    this.createAttackRange(100);
+    this.createRange(500);
+
+    // attack enemy
     this.context = {
       isEnemyInRange: false,
+      isEnemyInAttackRange: false,
       enemy: null, 
     }
   }
 
-  handleAttackOverlapWith(otherEntity) {
+
+  updateContext(enemy) {
+    if (this.context.enemy != null) {
+      // is contextual enemy in attack range
+      if (!this.isInAttackRange(this.context.enemy)) {
+        // is not in attack range
+        this.context.isEnemyInAttackRange = false;
+        if (!this.isInRange(this.context.enemy)) {
+          // is not in range and by default not in attack range
+          this.context.isEnemyInRange = false;
+          this.context.enemy = null;
+        } else {
+          // is in range and not in attack range
+          this.context.isEnemyInRange = true;
+        }
+      } else {
+        this.context.isEnemyInRange = true;
+        this.context.isEnemyInAttackRange = true;
+      }
+    } else {
+      // make the enemy the contextual enemy
+      if (this.isInRange(enemy)) {
+        this.context.isEnemyInRange = true;
+        this.context.enemy = enemy;
+        if (this.isInAttackRange(enemy)) {
+          this.context.isEnemyInAttackRange = true;
+        }
+      }
+    } 
   }
 
-  onAttackOverlap(entity1, entity2) {
+  attackEnemy() {
+    this.stopMoving();
+    // which side enemy is at
+    this.transitionStateTo("UPWARD_SLASH_LEFT");
   }
 
   decide() {
+    if (this.context.isEnemyInAttackRange) {
+      this.attackEnemy();
+    } else if (this.context.isEnemyInRange && !this.context.isEnemyInAttackRange) {
+      this.followEntity(this.context.enemy);
+    } else {
+      this.currentState = "IDLE_LEFT";
+    }
   }
 
   protectEntity(entity) {
@@ -37,11 +79,10 @@ export default class Warrior extends Entity {
   }
 
   attackEnemy() {
-    // go to the warrior
+    // go to the enemy
     // attack it
-
     if (this.hasReached) {
-      this.transitionStateTo("UPWARD_SLASH_LEFT");
+      this.transitionStateTo("UPWARD_SLASH_RIGHT");
       return;
     }
 
@@ -51,10 +92,13 @@ export default class Warrior extends Entity {
     }
   }
 
-  update() {
+  update(enemyArmy) {
+
+    enemyArmy.goblins.children.iterate((child) => {
+      this.updateContext(child);
+    });
 
     this.decide();
-
 
     switch (this.currentState) {
 
@@ -79,13 +123,13 @@ export default class Warrior extends Entity {
         break;
 
       case 'UPWARD_SLASH_LEFT':
-        this.setFlipX(true);
-        this.play('warrior-upward-slash-right-anim', true);
+        this.setFlipX(false);
+        this.play('warrior-upward-slash-anim', true);
         break;
 
       case 'UPWARD_SLASH_RIGHT':
-        this.setFlipX(false);
-        this.play('warrior-upward-slash-right-anim', true);
+        this.setFlipX(true);
+        this.play('warrior-upward-slash-anim', true);
         break;
 
       case 'DOWNWARD_SLASH_RIGHT':

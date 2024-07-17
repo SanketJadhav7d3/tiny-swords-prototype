@@ -79,14 +79,7 @@ export function createAnimations(scene) {
   });
 
   scene.anims.create({
-    key: 'warrior-downward-slash-right-anim',
-    frames: scene.anims.generateFrameNumbers('warrior-entity', { start: 12, end: 23 }), 
-    frameRate: 10,
-    repeat: -1
-  });
-
-  scene.anims.create({
-    key: 'warrior-upward-slash-right-anim',
+    key: 'warrior-upward-slash-anim',
     frames: scene.anims.generateFrameNumbers('warrior-entity', { start: 12, end: 23 }), 
     frameRate: 10,
     repeat: -1
@@ -151,7 +144,7 @@ export function createAnimations(scene) {
 
   scene.anims.create({
     key: 'goblin-attack-front-anim',
-    frames: scene.anims.generateFrameNumbers('goblin-entity', { start: 20, end: 26 }), 
+    frames: scene.anims.generateFrameNumbers('goblin-entity', { start: 21, end: 26 }), 
     frameRate: 10,
     repeat: 0
   });

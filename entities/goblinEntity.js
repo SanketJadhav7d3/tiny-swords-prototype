@@ -34,6 +34,8 @@ export default class Goblin extends Entity {
       warrior: null, 
       tower: null
     }
+
+    this.attackFrames = [17, 24, 31];
   }
 
   handleAttackOverlapWith(otherEntity) {
@@ -62,9 +64,16 @@ export default class Goblin extends Entity {
     // go to the warrior
     // attack it
 
+    let currentFrame = this.anims.currentFrame;
+    let frameNumber = currentFrame.frame.name;
+
+    this.attackFrames.forEach(attackFrame => {
+      if (frameNumber == attackFrame) this.context.warrior.health -= 2;
+    });
+
     this.stopMoving();
 
-    this.transitionStateTo("ATTACK_LEFT");
+    this.transitionStateTo("ATTACK_FRONT");
 
     // var warriorPos = this.context.warrior.getPosTile();
     // this.followEntity(this.context.warrior);
@@ -77,8 +86,8 @@ export default class Goblin extends Entity {
     // this.moveToTile(towerPos[0], towerPos[1], this.grid);
   }
 
-  isInAttackRange(child) {
-    return this.scene.physics.world.overlap(this.attackRange, child);
+  isInAttackRange(enemy) {
+    return this.scene.physics.world.overlap(this.attackRange, enemy);
   }
 
   isInRange(enemy) {
@@ -92,16 +101,13 @@ export default class Goblin extends Entity {
       if (!this.isInAttackRange(this.context.warrior)) {
         // is not in attack range
         this.context.isWarriorInAttackRange = false;
-        console.log('contextual enemy not in attack range');
 
         if (!this.isInRange(this.context.warrior)) {
           // is not in range and by default not in attack range
-          console.log('contextual enemy not in range');
           this.context.isWarriorInRange = false;
           this.context.warrior = null;
         } else {
           // is in range and not in attack range
-          console.log('contextual enemy in range');
           this.context.isWarriorInRange = true;
           // idotic
           // this.context.warrior = enemy;
@@ -114,11 +120,9 @@ export default class Goblin extends Entity {
     } else {
       // make the enemy the contextual warrior
       if (this.isInRange(enemy)) {
-        console.log('new enemy detected in range');
         this.context.isWarriorInRange = true;
         this.context.warrior = enemy;
         if (this.isInAttackRange(enemy)) {
-          console.log('new enemy detected in attack range');
           this.context.isWarriorInAttackRange = true;
         }
       }
@@ -126,6 +130,7 @@ export default class Goblin extends Entity {
   }
 
   decide() {
+
     if (this.context.isWarriorInAttackRange) {
       this.attackWarrior();
     } else if (this.context.isWarriorInRange && !this.context.isWarriorInAttackRange) {
@@ -176,6 +181,14 @@ export default class Goblin extends Entity {
       case "ATTACK_RIGHT":
         this.setFlipX(false);
         this.play('goblin-attack-right-anim', true);
+        break;
+
+      case "ATTACK_FRONT":
+        this.play('goblin-attack-front-anim', true);
+        break;
+
+      case "ATTACK_BACK":
+        this.play('goblin-attack-back-anim', true);
         break;
 
     }

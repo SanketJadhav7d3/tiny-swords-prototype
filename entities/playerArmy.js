@@ -24,8 +24,8 @@ export default class PlayerArmy {
 
   } 
 
-  spawnWarrior() {
-    var warrior = new Warrior(this.scene, 29 * 64, 17 * 64, 45, 60, this.pathLayer, this.finder, this.grid);
+  spawnWarrior(tileX, tileY) {
+    var warrior = new Warrior(this.scene, tileX * 64, tileY * 64, 45, 60, this.pathLayer, this.finder, this.grid);
     this.warriors.add(warrior);
   }
 
@@ -44,12 +44,12 @@ export default class PlayerArmy {
     });
   }
 
-  update() {
+  update(enemyArmy) {
     // this.p1.update();
     // this.p2.update();
 
     this.warriors.children.iterate((child) => {
-      child.update();
+      child.update(enemyArmy);
     });
 
     // this.workers.children.iterate((child) => {

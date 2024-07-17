@@ -40,6 +40,14 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
     this.moveTween = null;
   }
 
+  isInAttackRange(enemy) {
+    return this.scene.physics.world.overlap(this.attackRange, enemy);
+  }
+
+  isInRange(enemy) {
+    return this.scene.physics.world.overlap(this.range, enemy);
+  }
+
   createAttackRange(size) {
     let graphics = this.scene.add.graphics();
     graphics.fillStyle(0xFF0000, 0.1); // White color
@@ -169,7 +177,7 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
     var entityPos = entity.getPosTile();
     var thisPos = this.getPosTile();
     var gridClone = this.grid.clone();
-    var path = this.finder.findPath(thisPos[0], thisPos[1], entityPos[0]+1, entityPos[1], gridClone);
+    var path = this.finder.findPath(thisPos[0], thisPos[1], entityPos[0], entityPos[1]-1, gridClone);
     var nextTileX;
     var nextTileY;
 
