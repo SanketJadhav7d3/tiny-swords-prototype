@@ -38,6 +38,8 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
     this.hasStarted = false;
 
     this.moveTween = null;
+    this.posAround = [[1, 0], [0, 1], [-1, 0], [0, -1]];
+    this.posTaken = null;
   }
 
   isInAttackRange(enemy) {
@@ -174,15 +176,25 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
     
     // recalculate the path
 
+
     var entityPos = entity.getPosTile();
     var thisPos = this.getPosTile();
     var gridClone = this.grid.clone();
-    var path = this.finder.findPath(thisPos[0], thisPos[1], entityPos[0], entityPos[1]-1, gridClone);
+    // choose position around
+    let randomIndex = Math.floor(Math.random() * this.posAround.length);
+    let randomElement = this.posAround[randomIndex];
+
+    this.posTaken = randomElement;
+
+    var path = this.finder.findPath(thisPos[0], thisPos[1], entityPos[0] + randomElement[0], 
+      entityPos[1] + randomElement[1], gridClone);
     var nextTileX;
     var nextTileY;
 
     // find index of next different location
     var i = 0;
+    this.hasStarted = true;
+    this.hasReached = false;
 
     // go to the next position
     if (path[1]) {
@@ -190,8 +202,7 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
       nextTileY = path[1][1];
     } else {
       console.log("reached");
-      this.hasStarted = false;
-      this.hasReached = true;
+      this.stopMoving();
       return;
     }
 

@@ -20,6 +20,7 @@ export default class GameLogic {
     this.playerArmy.spawnWarrior(30, 17);
     this.playerArmy.spawnWarrior(30, 18);
     this.playerArmy.spawnWarrior(32, 18);
+    this.playerArmy.spawnWarrior(26, 9);
 
     this.towers.handleOverlapWithGroup(this.playerArmy.warriors);
     this.towers.handleOverlapWithGroup(this.enemyArmy.goblins);

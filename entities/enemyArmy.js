@@ -27,6 +27,14 @@ export default class EnemyArmy {
     this.goblins.add(new Goblin(scene, 31 * 64, 12 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
     this.goblins.add(new Goblin(scene, 30 * 64, 14 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
     this.goblins.add(new Goblin(scene, 34 * 64, 15 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
+    this.goblins.add(new Goblin(scene, 16 * 64, 10 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
+    // this.goblins.add(new Goblin(scene, 26 * 64, 9 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
+    // this.goblins.add(new Goblin(scene, 16 * 64, 10 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
+    // this.goblins.add(new Goblin(scene, 16 * 64, 12 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
+    // this.goblins.add(new Goblin(scene, 16 * 64, 12 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
+    // this.goblins.add(new Goblin(scene, 15 * 64, 13 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
+    // this.goblins.add(new Goblin(scene, 13 * 64, 19 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
+    // this.goblins.add(new Goblin(scene, 17 * 64, 21 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
     // this.goblins.add(new Goblin(scene, 30 * 64, 10 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
 
     // this.goblins.children.iterate((goblin) => {

@@ -72,6 +72,7 @@ export default class Goblin extends Entity {
     // go to the warrior
     // attack it
 
+
     let currentFrame = this.anims.currentFrame;
     let frameNumber = currentFrame.frame.name;
 
@@ -84,7 +85,18 @@ export default class Goblin extends Entity {
 
     this.stopMoving();
 
-    this.transitionStateTo("ATTACK_FRONT");
+    console.log(this.posTaken);
+    if (this.posTaken[0] == 0 && this.posTaken[1] == 1)
+      this.transitionStateTo("ATTACK_FRONT");
+    else if (this.posTaken[0] == 0 && this.posTaken[1] == -1)
+      this.transitionStateTo("ATTACK_BACK");
+    else if (this.posTaken == 1 && this.posTaken[1] == 0)
+      this.transitionStateTo("ATTACK_LEFT");
+    else if (this.posTaken == -1 && this.posTaken[1] == 0)
+      this.transitionStateTo("ATTACK_RIGHT");
+    else
+      this.transitionStateTo("ATTACK_RIGHT");
+
     // var warriorPos = this.context.warrior.getPosTile();
     // this.followEntity(this.context.warrior);
   }
@@ -154,7 +166,10 @@ export default class Goblin extends Entity {
     } else if (this.context.isWarriorInRange && !this.context.isWarriorInAttackRange) {
       this.followEntity(this.context.warrior);
     } else {
-      this.currentState = "IDLE_LEFT";
+      var words = this.currentState.split('_')
+      var dir = words[words.length-1]
+      if (dir == "FRONT" || dir == "BACK") dir = "LEFT";
+      this.currentState = "IDLE_" + dir;
     }
   }
 
