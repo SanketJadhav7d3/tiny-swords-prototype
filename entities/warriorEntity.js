@@ -12,7 +12,7 @@ export default class Warrior extends Entity {
   constructor(scene, x, y, width, height, pathLayer, finder, grid) {
     super(scene, x, y, width, height, 'warrior-entity', pathLayer, finder, grid);
     this.currentState = WarriorStates.IDLE_RIGHT;
-    this.health = 50;
+    this.health = 100;
 
     this.createAttackRange(100);
     this.createRange(500);
@@ -23,6 +23,9 @@ export default class Warrior extends Entity {
       isEnemyInAttackRange: false,
       enemy: null, 
     }
+
+    this.attackFrames = [15, 21, 27, 33];
+    this.damage = 2;
   }
 
 
@@ -57,7 +60,21 @@ export default class Warrior extends Entity {
   }
 
   attackEnemy() {
+    let currentFrame = this.anims.currentFrame;
+    let frameNumber = currentFrame.frame.name;
+
+    this.attackFrames.forEach(attackFrame => {
+      if (frameNumber == attackFrame) {
+        if (this.context.enemy) {
+          // inflict damage on enemy
+          this.context.enemy.sustainDamage();
+          console.log(this.context.enemy.health);
+        }
+      }
+    });
+
     this.stopMoving();
+
     // which side enemy is at
     this.transitionStateTo("UPWARD_SLASH_LEFT");
   }
@@ -78,22 +95,8 @@ export default class Warrior extends Entity {
     this.moveToTile(entityPos[0], entityPos[1] - 1, this.grid);
   }
 
-  attackEnemy() {
-    // go to the enemy
-    // attack it
-    if (this.hasReached) {
-      this.transitionStateTo("UPWARD_SLASH_RIGHT");
-      return;
-    }
-
-    if (!this.isMoving()) {
-      var enemyPos = this.context.enemy.getPosTile();
-      this.moveToTile(enemyPos[0], enemyPos[1], this.grid);
-    }
-  }
-
   sustainDamage() {
-    this.health -= 2;
+    this.health -= this.damage;
     this.setTint(0xff0000); 
     
     setTimeout(() => {
@@ -103,6 +106,13 @@ export default class Warrior extends Entity {
 
   update(enemyArmy) {
 
+    // check if context warrior is dead or not 
+    if (!enemyArmy.goblins.contains(this.context.enemy)) {
+      this.context.isEnemyInRange = false;
+      this.context.isEnemyInAttackRange = false;
+      this.context.enemy = null;
+    }
+
     enemyArmy.goblins.children.iterate((child) => {
       this.updateContext(child);
     });
@@ -110,7 +120,6 @@ export default class Warrior extends Entity {
     this.decide();
 
     switch (this.currentState) {
-
       case 'RUN_RIGHT':
         this.setFlipX(false);
         this.play('warrior-run-anim', true);
@@ -176,7 +185,7 @@ export default class Warrior extends Entity {
     }
 
     if (this.health <= 0) {
-      console.log("got killed");
+      this.disableBody(true, true);
       this.attackRange.destroy();
       this.range.destroy();
       this.destroy();

@@ -49,13 +49,8 @@ export default class PlayerArmy {
     // this.p2.update();
 
     this.warriors.children.iterate((child) => {
-      child.update(enemyArmy);
-
-      if (child.health <= 0) {
-        this.warriors.remove(child.attackRange);
-        this.warriors.remove(child.range);
-        this.warriors.remove(child);
-      }
+      if (child)
+        child.update(enemyArmy);
     });
 
     // this.workers.children.iterate((child) => {

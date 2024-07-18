@@ -36,6 +36,7 @@ export default class Goblin extends Entity {
     }
 
     this.attackFrames = [17, 24, 31];
+    this.damage = 3;
   }
 
   handleAttackOverlapWith(otherEntity) {
@@ -46,13 +47,21 @@ export default class Goblin extends Entity {
       //() => { this.setAlpha(0.5) }, null, this.scene);
   }
 
+  sustainDamage() {
+    this.health -= this.damage;
+    this.setTint(0xff0000); 
+    
+    setTimeout(() => {
+      this.clearTint(); 
+    }, 10);
+  }
+
   onAttackOverlap(entity1, entity2) {
     if (entity2.texture.key == "warrior-entity" && !this.context.isWarriorInRange) {
       this.context.isWarriorInRange = true;
       this.context.warrior = entity2;
       // attack the warrior
     }
-
     else if (entity2.texture.key == "tower-entity" && !this.context.isTowerInRange) {
       this.context.isTowerInRange = true;
       this.context.tower = entity2;
@@ -76,7 +85,6 @@ export default class Goblin extends Entity {
     this.stopMoving();
 
     this.transitionStateTo("ATTACK_FRONT");
-
     // var warriorPos = this.context.warrior.getPosTile();
     // this.followEntity(this.context.warrior);
   }
@@ -152,12 +160,20 @@ export default class Goblin extends Entity {
 
   update(playerArmy) {
 
+    // check if context warrior is dead or not 
+    if (!playerArmy.warriors.contains(this.context.warrior)) {
+      this.context.isWarriorInRange = false;
+      this.context.isWarriorInAttackRange = false;
+      this.context.warrior = null;
+    }
+
     playerArmy.warriors.children.iterate((child) => {
       // if there is overlap between the goblin and the warrior
       // check if there is already any warrior in range
       // if yes then don't update unless if the new warrior is not attacking the goblin
       this.updateContext(child);
     });
+
 
     this.decide();
 
@@ -201,6 +217,13 @@ export default class Goblin extends Entity {
       case "ATTACK_BACK":
         this.play('goblin-attack-back-anim', true);
         break;
+    }
+
+    if (this.health <= 0) {
+      this.disableBody(true, true);
+      this.attackRange.destroy();
+      this.range.destroy();
+      this.destroy();
     }
   }
 }

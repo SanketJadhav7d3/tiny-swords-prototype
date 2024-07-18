@@ -50,7 +50,7 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
 
   createAttackRange(size) {
     let graphics = this.scene.add.graphics();
-    graphics.fillStyle(0xFF0000, 0.1); // White color
+    graphics.fillStyle(0xFF0000, 0.0); // White color
 
     // Draw a square
     graphics.fillRect(0, 0, size, size);
@@ -66,7 +66,7 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
   createRange(size) {
     let graphics = this.scene.add.graphics();
 
-    graphics.fillStyle(0x808080, 0.1); // White color
+    graphics.fillStyle(0x808080, 0.0); // White color
 
     // Draw a square
     graphics.fillRect(0, 0, size, size);

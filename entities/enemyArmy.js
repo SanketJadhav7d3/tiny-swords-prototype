@@ -20,6 +20,13 @@ export default class EnemyArmy {
     // this.bombers.add(new Bomber(scene, 13 * 64, 17 * 64, 45, 60, this.pathLayer, this.finder));
 
     this.goblins.add(new Goblin(scene, 30 * 64, 13 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
+    this.goblins.add(new Goblin(scene, 31 * 64, 13 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
+    this.goblins.add(new Goblin(scene, 31 * 64, 12 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
+    this.goblins.add(new Goblin(scene, 30 * 64, 12 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
+    this.goblins.add(new Goblin(scene, 30 * 64, 14 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
+    this.goblins.add(new Goblin(scene, 31 * 64, 12 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
+    this.goblins.add(new Goblin(scene, 30 * 64, 14 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
+    this.goblins.add(new Goblin(scene, 34 * 64, 15 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
     // this.goblins.add(new Goblin(scene, 30 * 64, 10 * 64, 45, 60, this.pathLayer, this.finder, this.grid));
 
     // this.goblins.children.iterate((goblin) => {
@@ -38,12 +45,18 @@ export default class EnemyArmy {
     });
   }
 
+  spawnGoblin(tileX, tileY) {
+    var goblin = new Goblin(this.scene, tileX * 64, tileY * 64, 45, 60, this.pathLayer, this.finder, this.grid);
+    this.goblins.add(goblin);
+  }
+
   update(playerArmy) {
     // this.p1.update();
     // this.p2.update();
 
     this.goblins.children.iterate((child) => {
-      child.update(playerArmy);
+      if (child)
+        child.update(playerArmy);
     });
   }
 }

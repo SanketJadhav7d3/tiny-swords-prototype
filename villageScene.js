@@ -316,6 +316,8 @@ export default class VillageScene extends Phaser.Scene {
       var tileX = pathLayer.worldToTileX(pointer.worldX);
       var tileY = pathLayer.worldToTileX(pointer.worldY);
 
+      enemyArmy.spawnGoblin(tileX, tileY);
+
       console.log('Pointer clicked at world coordinates:', tileX, tileY);
     });
 
