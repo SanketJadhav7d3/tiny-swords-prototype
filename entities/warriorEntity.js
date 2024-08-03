@@ -60,6 +60,7 @@ export default class Warrior extends Entity {
   }
 
   attackEnemy() {
+    console.log(this.currentState);
     let currentFrame = this.anims.currentFrame;
     let frameNumber = currentFrame.frame.name;
 
@@ -74,6 +75,9 @@ export default class Warrior extends Entity {
     });
 
     this.stopMoving();
+    this.setVelocity(0, 0);
+    this.attackRange.setVelocity(0, 0);
+    this.range.setVelocity(0, 0);
 
     // which side enemy is at
     this.transitionStateTo("UPWARD_SLASH_LEFT");

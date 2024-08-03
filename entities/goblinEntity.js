@@ -85,7 +85,6 @@ export default class Goblin extends Entity {
 
     this.stopMoving();
 
-    console.log(this.posTaken);
     if (this.posTaken[0] == 0 && this.posTaken[1] == 1)
       this.transitionStateTo("ATTACK_FRONT");
     else if (this.posTaken[0] == 0 && this.posTaken[1] == -1)

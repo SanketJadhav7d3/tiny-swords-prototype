@@ -52,7 +52,7 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
 
   createAttackRange(size) {
     let graphics = this.scene.add.graphics();
-    graphics.fillStyle(0xFF0000, 0.0); // White color
+    graphics.fillStyle(0xFF0000, 0.1); // White color
 
     // Draw a square
     graphics.fillRect(0, 0, size, size);
@@ -87,9 +87,9 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
   }
 
   stopMoving() {
-    if (this.moveTween)
-      this.moveTween.stop();
-    this.moveTween = null;
+    this.setVelocity(0, 0);
+    this.attackRange.setVelocity(0, 0);
+    this.range.setVelocity(0, 0);
   }
 
   isMoving() {
@@ -125,50 +125,6 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
     return [playerTileX, playerTileY];
   }
 
-  moveAlongPath(path, index) {
-    if (index >= path.length) {
-      // Stop animation when path is completed
-      if (this.currentState == "RUN_RIGHT")
-      this.transitionStateTo("IDLE_RIGHT");
-      else
-      this.transitionStateTo("IDLE_LEFT");
-
-      this.hasStarted = false;
-      this.hasReached = true;
-
-      if (this.tween) this.stopMoving();
-
-      return;
-    }
-
-    var tileX = path[index][0];
-    var tileY = path[index][1];
-
-    const tile = this.pathLayer.getTileAt(tileX, tileY);
-
-    // Convert tile coordinates to world coordinates
-    const worldX = tile.getCenterX();
-    const worldY = tile.getCenterY();
-
-    // Play walking animation
-    if (worldX >= this.x)
-      this.transitionStateTo('RUN_RIGHT');
-    else
-      this.transitionStateTo('RUN_LEFT');
-
-    // Create tween to move the sprite to the next tile
-    this.moveTween = this.scene.tweens.add({
-      targets: [this, this.attackRange],
-      x: worldX,
-      y: worldY,
-      duration: 300, // Adjust duration as needed
-      onComplete: () => {
-        // Move to the next tile in the path
-        this.moveAlongPath(path, index + 1);
-      }
-    });
-  }
-
   followEntity(entity) {
     // find path to the entity
 
@@ -176,13 +132,11 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
     
     // recalculate the path
 
-
     var entityPos = entity.getPosTile();
     var thisPos = this.getPosTile();
     var gridClone = this.grid.clone();
     // choose position around
-    let randomIndex = Math.floor(Math.random() * this.posAround.length);
-    let randomElement = this.posAround[randomIndex];
+    let randomIndex = Math.floor(Math.random() * this.posAround.length); let randomElement = this.posAround[randomIndex];
 
     this.posTaken = randomElement;
 
@@ -202,6 +156,9 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
       nextTileY = path[1][1];
     } else {
       console.log("reached");
+      this.setVelocity(0, 0);
+      this.attackRange.setVelocity(0, 0);
+      this.range.setVelocity(0, 0);
       this.stopMoving();
       return;
     }
@@ -221,15 +178,12 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
     else
       this.transitionStateTo('RUN_LEFT');
 
-    this.moveTween = this.scene.tweens.add({
-      targets: [this, this.attackRange, this.range],
-      x: worldX,
-      y: worldY,
-      duration: 300,
-      onComplete: () => {
-        // Move to the next tile in the path
-        // this.stopMoving();
-      }
-    });
+    // calculate direction 
+    var dirX = Math.sign(nextTileX - thisPos[0]);
+    var dirY = Math.sign(nextTileY - thisPos[1]);
+    console.log(thisPos[0], thisPos[1], nextTileX, nextTileY, dirX, dirY, this.currentState);
+    this.setVelocity(90 * dirX, 90 * dirY);
+    this.attackRange.setVelocity(90 * dirX, 90 * dirY);
+    this.range.setVelocity(90 * dirX, 90 * dirY);
   }
 }
