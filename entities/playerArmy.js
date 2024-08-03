@@ -36,6 +36,11 @@ export default class PlayerArmy {
     warrior.protectEntity(tower);
   }
 
+  follow(index, mouseX, mouseY) {
+    var warrior = this.warriors.getChildren()[index]
+    warrior.followMouse(mouseX, mouseY);
+  }
+
   handleWarriorAttackOverlapWithGroup(otherGroup) {
     this.warriors.children.iterate((warrior) => {
       otherGroup.children.iterate((child) => {

@@ -52,7 +52,7 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
 
   createAttackRange(size) {
     let graphics = this.scene.add.graphics();
-    graphics.fillStyle(0xFF0000, 0.1); // White color
+    graphics.fillStyle(0xFF0000, 0.0); // White color
 
     // Draw a square
     graphics.fillRect(0, 0, size, size);
@@ -125,6 +125,71 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
     return [playerTileX, playerTileY];
   }
 
+  followMouse(mouseX, mouseY) {
+    // find path to the entity
+
+    // move the second tile 
+    
+    // recalculate the path
+
+    var entityPos = [mouseX, mouseY];
+    var thisPos = this.getPosTile();
+    var gridClone = this.grid.clone();
+    // choose position around
+    let randomIndex = Math.floor(Math.random() * this.posAround.length);
+    let randomElement = this.posAround[randomIndex];
+
+    this.posTaken = randomElement;
+
+    var path = this.finder.findPath(thisPos[0], thisPos[1], entityPos[0] + randomElement[0], 
+      entityPos[1] + randomElement[1], gridClone);
+
+    var nextTileX;
+    var nextTileY;
+
+    // find index of next different location
+    var i = 0;
+    this.hasStarted = true;
+    this.hasReached = false;
+
+    // go to the next position
+    if (path[1]) {
+      nextTileX = path[1][0];
+      nextTileY = path[1][1];
+    } else {
+      console.log("reached");
+      this.setVelocity(0, 0);
+      this.attackRange.setVelocity(0, 0);
+      this.range.setVelocity(0, 0);
+      this.stopMoving();
+      return;
+    }
+
+    //for (i = 0; i < path.length; ++i) {
+      //if (nextTileX != thisPos[0] || nextTileY != thisPos[1]) break;
+    //} 
+
+    const tile = this.pathLayer.getTileAt(nextTileX, nextTileY);
+
+    const worldX = tile.getCenterX();
+    const worldY = tile.getCenterY();
+    
+    // Play walking animation
+    if (worldX > this.x)
+      this.transitionStateTo('RUN_RIGHT');
+    else
+      this.transitionStateTo('RUN_LEFT');
+
+    // calculate direction 
+    var dirX = Math.sign(nextTileX - thisPos[0]);
+    var dirY = Math.sign(nextTileY - thisPos[1]);
+    console.log(thisPos[0], thisPos[1], nextTileX, nextTileY, dirX, dirY, this.currentState);
+    this.setVelocity(90 * dirX, 90 * dirY);
+    this.attackRange.setVelocity(90 * dirX, 90 * dirY);
+    this.range.setVelocity(90 * dirX, 90 * dirY);
+
+  }
+
   followEntity(entity) {
     // find path to the entity
 
@@ -136,12 +201,14 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
     var thisPos = this.getPosTile();
     var gridClone = this.grid.clone();
     // choose position around
-    let randomIndex = Math.floor(Math.random() * this.posAround.length); let randomElement = this.posAround[randomIndex];
+    let randomIndex = Math.floor(Math.random() * this.posAround.length);
+    let randomElement = this.posAround[randomIndex];
 
     this.posTaken = randomElement;
 
     var path = this.finder.findPath(thisPos[0], thisPos[1], entityPos[0] + randomElement[0], 
       entityPos[1] + randomElement[1], gridClone);
+
     var nextTileX;
     var nextTileY;
 

@@ -316,7 +316,7 @@ export default class VillageScene extends Phaser.Scene {
       var tileX = pathLayer.worldToTileX(pointer.worldX);
       var tileY = pathLayer.worldToTileX(pointer.worldY);
 
-      playerArmy.spawnWarrior(tileX, tileY);
+      // playerArmy.follow(0, tileX, tileY);
 
       console.log('Pointer clicked at world coordinates:', tileX, tileY);
     });
