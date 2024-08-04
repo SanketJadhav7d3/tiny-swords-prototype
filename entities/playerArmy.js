@@ -29,6 +29,11 @@ export default class PlayerArmy {
     this.warriors.add(warrior);
   }
 
+  spawnWorker(tileX, tileY) {
+    var worker = new Worker(this.scene, tileX * 64, tileY * 64, 45, 60, this.pathLayer, this.finder, this.grid);
+    this.workers.add(worker);
+  }
+
   protectTower(index, tower) {
     // go to that tower and protect it 
     // warrior.moveToTile(towerPos[0], towerPos[1]);
@@ -58,9 +63,9 @@ export default class PlayerArmy {
         child.update(enemyArmy);
     });
 
-    // this.workers.children.iterate((child) => {
-      // child.update();
-    // });
+    this.workers.children.iterate((child) => {
+      child.update();
+    });
 
     // this.archers.children.iterate((child) => {
       // child.update();

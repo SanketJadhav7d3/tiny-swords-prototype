@@ -313,13 +313,13 @@ export default class VillageScene extends Phaser.Scene {
         obj.play('wind');
       }, [], this);
     });
-
+/*
     this.input.on('pointerdown', function (pointer) {
       var tileX = pathLayer.worldToTileX(pointer.worldX);
       var tileY = pathLayer.worldToTileX(pointer.worldY);
 
       if (pointer.leftButtonDown()) {
-        playerArmy.spawnWarrior(tileX, tileY);
+        playerArmy.spawnWorker(tileX, tileY);
       }
       if (pointer.rightButtonDown()) {
         enemyArmy.spawnGoblin(tileX, tileY);
@@ -327,7 +327,7 @@ export default class VillageScene extends Phaser.Scene {
 
       console.log('Pointer clicked at world coordinates:', tileX, tileY);
     });
-
+*/
     const camera = this.cameras.main;
     camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 

@@ -5,6 +5,8 @@ Interactive objects - Warriors, Towers, Castle and Goblins for now
 Game logic class handles all the interaction between them
 */
 
+// mouse controller
+
 export default class GameLogic {
 
   constructor(scene, castle, towers, playerArmy, enemyArmy) {
@@ -15,8 +17,6 @@ export default class GameLogic {
     this.enemyArmy = enemyArmy;
 
     var towersArray = this.towers.towersGroup.getChildren();
-
-    this.playerArmy.spawnWarrior(29, 17);
 
     this.towers.handleOverlapWithGroup(this.playerArmy.warriors);
     this.towers.handleOverlapWithGroup(this.enemyArmy.goblins);

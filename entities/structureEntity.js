@@ -14,6 +14,9 @@ export default class Structure extends Entity {
     this.visualOffset = 30;
     this.hasOverlapped = false;
     // this.attackRange.setVisible(false);
+    this.setInteractive(this.scene.input.makePixelPerfect());
+
+
   }
 
   handleOverlapWith(otherEntity) {
@@ -77,6 +80,10 @@ export class Castle extends Structure {
     this.firePlace4.setDepth(2);
     this.firePlace4.setVisible(false);
     // this.firePlace4.play('fire-anim');
+
+    this.on('pointerdown', (pointer) => {
+      console.log('you clicked castle');
+    });
   }
 
   update(movingEntities) {
@@ -108,6 +115,10 @@ export class House extends Structure {
   constructor(scene, x, y, width, height, texture) {
     super(scene, x, y, width, height, texture);
     this.currentState = StructureStates.BUILT;
+
+    this.on('pointerdown', (pointer) => {
+      console.log('you clicked house');
+    });
   }
 
   update() {
@@ -142,6 +153,9 @@ export class Tower extends Structure {
     this.firePlace2.setDepth(2);
     this.firePlace2.setVisible(false);
     // this.firePlace2.play('fire-anim');
+    this.on('pointerdown', (pointer) => {
+      console.log('you clicked tower');
+    });
   }
 
   update(movingEntities) {
