@@ -39,7 +39,7 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
 
     this.moveTween = null;
     this.posAround = [[1, 0], [0, 1], [-1, 0], [0, -1]];
-    this.posTaken = null;
+    this.posTaken = this.posAround[0];
   }
 
   isInAttackRange(enemy) {
@@ -157,7 +157,6 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
       nextTileX = path[1][0];
       nextTileY = path[1][1];
     } else {
-      console.log("reached");
       this.setVelocity(0, 0);
       this.attackRange.setVelocity(0, 0);
       this.range.setVelocity(0, 0);
@@ -183,7 +182,6 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
     // calculate direction 
     var dirX = Math.sign(nextTileX - thisPos[0]);
     var dirY = Math.sign(nextTileY - thisPos[1]);
-    console.log(thisPos[0], thisPos[1], nextTileX, nextTileY, dirX, dirY, this.currentState);
     this.setVelocity(90 * dirX, 90 * dirY);
     this.attackRange.setVelocity(90 * dirX, 90 * dirY);
     this.range.setVelocity(90 * dirX, 90 * dirY);
@@ -222,7 +220,6 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
       nextTileX = path[1][0];
       nextTileY = path[1][1];
     } else {
-      console.log("reached");
       this.setVelocity(0, 0);
       this.attackRange.setVelocity(0, 0);
       this.range.setVelocity(0, 0);
@@ -248,7 +245,6 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
     // calculate direction 
     var dirX = Math.sign(nextTileX - thisPos[0]);
     var dirY = Math.sign(nextTileY - thisPos[1]);
-    console.log(thisPos[0], thisPos[1], nextTileX, nextTileY, dirX, dirY, this.currentState);
     this.setVelocity(90 * dirX, 90 * dirY);
     this.attackRange.setVelocity(90 * dirX, 90 * dirY);
     this.range.setVelocity(90 * dirX, 90 * dirY);

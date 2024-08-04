@@ -60,8 +60,11 @@ export default class Warrior extends Entity {
   }
 
   attackEnemy() {
-    console.log(this.currentState);
     let currentFrame = this.anims.currentFrame;
+
+    // for no reason
+    if (!currentFrame) return;
+
     let frameNumber = currentFrame.frame.name;
 
     this.attackFrames.forEach(attackFrame => {
@@ -69,7 +72,6 @@ export default class Warrior extends Entity {
         if (this.context.enemy) {
           // inflict damage on enemy
           this.context.enemy.sustainDamage();
-          console.log(this.context.enemy.health);
         }
       }
     });
@@ -90,6 +92,7 @@ export default class Warrior extends Entity {
       this.followEntity(this.context.enemy);
     } else {
       this.currentState = "IDLE_LEFT";
+      this.stopMoving();
     }
   }
 

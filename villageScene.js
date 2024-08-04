@@ -90,6 +90,8 @@ export default class VillageScene extends Phaser.Scene {
 
   create() {
 
+    this.input.mouse.disableContextMenu();
+
     const map = this.make.tilemap({ key: "map"});
 
     // custom cursor
@@ -316,7 +318,12 @@ export default class VillageScene extends Phaser.Scene {
       var tileX = pathLayer.worldToTileX(pointer.worldX);
       var tileY = pathLayer.worldToTileX(pointer.worldY);
 
-      // playerArmy.follow(0, tileX, tileY);
+      if (pointer.leftButtonDown()) {
+        playerArmy.spawnWarrior(tileX, tileY);
+      }
+      if (pointer.rightButtonDown()) {
+        enemyArmy.spawnGoblin(tileX, tileY);
+      }
 
       console.log('Pointer clicked at world coordinates:', tileX, tileY);
     });

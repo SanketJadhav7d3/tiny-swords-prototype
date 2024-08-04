@@ -74,6 +74,7 @@ export default class Goblin extends Entity {
 
 
     let currentFrame = this.anims.currentFrame;
+    if (!currentFrame) return;
     let frameNumber = currentFrame.frame.name;
 
     this.attackFrames.forEach(attackFrame => {
