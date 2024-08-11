@@ -113,6 +113,8 @@ export default class Warrior extends Entity {
 
   update(enemyArmy) {
 
+    this.depth = (this.y / window.innerHeight) * 5;
+
     // check if context warrior is dead or not 
     if (!enemyArmy.goblins.contains(this.context.enemy)) {
       this.context.isEnemyInRange = false;

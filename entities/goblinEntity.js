@@ -87,15 +87,15 @@ export default class Goblin extends Entity {
     this.stopMoving();
 
     if (this.posTaken[0] == 0 && this.posTaken[1] == 1)
-      this.transitionStateTo("ATTACK_FRONT");
+      this.transitionStateTo("ATTACK_RIGHT");
     else if (this.posTaken[0] == 0 && this.posTaken[1] == -1)
-      this.transitionStateTo("ATTACK_BACK");
+      this.transitionStateTo("ATTACK_LEFT");
     else if (this.posTaken == 1 && this.posTaken[1] == 0)
       this.transitionStateTo("ATTACK_LEFT");
     else if (this.posTaken == -1 && this.posTaken[1] == 0)
       this.transitionStateTo("ATTACK_RIGHT");
     else
-      this.transitionStateTo("ATTACK_RIGHT");
+      this.transitionStateTo("ATTACK_LEFT");
 
     // var warriorPos = this.context.warrior.getPosTile();
     // this.followEntity(this.context.warrior);
