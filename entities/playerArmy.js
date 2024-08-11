@@ -21,7 +21,8 @@ export default class PlayerArmy {
     this.warriors = scene.physics.add.group();
     this.workers = scene.physics.add.group();
     this.archers = scene.physics.add.group();
-
+    
+    this.spawnWarrior(16, 10);
   } 
 
   spawnWarrior(tileX, tileY) {

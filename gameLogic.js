@@ -21,6 +21,7 @@ export default class GameLogic {
     this.towers.handleOverlapWithGroup(this.playerArmy.warriors);
     this.towers.handleOverlapWithGroup(this.enemyArmy.goblins);
 
+
     // this.enemyArmy.handleGoblinAttackOverlapWithGroup(this.playerArmy.warriors);
     // this.playerArmy.handleWarriorAttackOverlapWithGroup(this.enemyArmy.goblins);
   }

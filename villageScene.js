@@ -90,6 +90,18 @@ export default class VillageScene extends Phaser.Scene {
 
   create() {
 
+
+    this.input.on('pointerdown', this.onDragStart, this);
+    this.input.on('pointermove', this.onDrag, this);
+    this.input.on('pointerup', this.onDragEnd, this);
+
+    this.selectionRect = new Phaser.Geom.Rectangle(0, 0, 0, 0);
+    this.isDragging = false;
+
+    this.graphics = this.add.graphics();
+
+    this.graphics.setDepth(10);
+
     this.input.mouse.disableContextMenu();
 
     const map = this.make.tilemap({ key: "map"});
@@ -313,7 +325,7 @@ export default class VillageScene extends Phaser.Scene {
         obj.play('wind');
       }, [], this);
     });
-
+/*
     this.input.on('pointerdown', function (pointer) {
       var tileX = pathLayer.worldToTileX(pointer.worldX);
       var tileY = pathLayer.worldToTileX(pointer.worldY);
@@ -327,7 +339,7 @@ export default class VillageScene extends Phaser.Scene {
 
       console.log('Pointer clicked at world coordinates:', tileX, tileY);
     });
-
+*/
     const camera = this.cameras.main;
     camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
@@ -356,6 +368,49 @@ export default class VillageScene extends Phaser.Scene {
 
     this.prevPointer = this.input.activePointer.position.clone();
   }
+
+  onDragStart(pointer) {
+    // Use 'this' to access class properties and methods
+    this.isDragging = true;
+
+    // Set the initial position of the selection rectangle
+    this.selectionRect = new Phaser.Geom.Rectangle(pointer.x, pointer.y, 0, 0);
+  }
+
+  onDrag(pointer) {
+    if (!this.isDragging) return;
+
+    console.log('dragging');
+
+    // Update the dimensions of the selection rectangle
+    this.selectionRect.width = pointer.x - this.selectionRect.x;
+    this.selectionRect.height = pointer.y - this.selectionRect.y;
+
+    // Clear and draw the selection rectangle
+    this.graphics.clear();
+    this.graphics.lineStyle(2, 0xff0000);
+    this.graphics.strokeRectShape(this.selectionRect);
+
+    // Check for overlaps and update object states
+    this.checkSelection();
+  }
+
+  checkSelection() {
+    // Check which objects are within the selection rectangle
+    playerArmy.warriors.children.iterate(child => {
+      if (child.getBounds().contains(this.selectionRect.x, this.selectionRect.y)) {
+        child.setTint(0xff0000); // Change color for selected objects
+      } else {
+        child.clearTint(); // Remove color for non-selected objects
+      }
+    });
+  }
+
+  onDragEnd() {
+    this.isDragging = false;
+    this.graphics.clear(); // Clear the rectangle drawing
+  }
+
 
   update(time, delta) {
     this.controls.update(delta);
