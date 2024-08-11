@@ -170,10 +170,14 @@ export default class Goblin extends Entity {
       var dir = words[words.length-1]
       if (dir == "FRONT" || dir == "BACK") dir = "LEFT";
       this.currentState = "IDLE_" + dir;
+      this.stopMoving();
     }
   }
 
   update(playerArmy) {
+
+    // update depth
+    this.depth = (this.y / window.innerHeight) * 5;
 
     // check if context warrior is dead or not 
     if (!playerArmy.warriors.contains(this.context.warrior)) {

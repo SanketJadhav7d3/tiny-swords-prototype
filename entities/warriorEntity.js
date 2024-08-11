@@ -86,6 +86,8 @@ export default class Warrior extends Entity {
   }
 
   decide() {
+
+
     if (this.context.isEnemyInAttackRange) {
       this.attackEnemy();
     } else if (this.context.isEnemyInRange && !this.context.isEnemyInAttackRange) {
@@ -134,7 +136,7 @@ export default class Warrior extends Entity {
         this.play('warrior-run-anim', true);
         break;
 
-      case 'RUN_RIGHT':
+      case 'RUN_LEFT':
         this.setFlipX(true);
         this.play('warrior-run-anim', true);
         break;
